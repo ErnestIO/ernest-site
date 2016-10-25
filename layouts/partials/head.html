@@ -9,6 +9,7 @@
   {{ partial "base/metas" . }}
   {{ partial "base/imports" . }}
   <script src="https://use.fontawesome.com/2abc4da92a.js"></script>
+  <link href="https://cdn.jsdelivr.net/github-markdown-css/2.4.1/github-markdown.css" type="text/css" rel="stylesheet" media="screen" />
 </head>
 <body{{ with .Site.Params.theme }} class="{{ . }}"{{ end }} data-ng-app="myapp" data-ng-controller="MyController" data-ng-mouseleave="MouseLeave($event)">
     {{ partial "base/header" . }}

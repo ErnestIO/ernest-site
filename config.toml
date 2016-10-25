@@ -121,3 +121,7 @@ disqusShortname = "shortname"
 [[menu.documentation]]
   name = "vCloud Director"
   weight = 2
+[[menu.developer]]
+  name = "Developer documentation"
+  weight = 0
+

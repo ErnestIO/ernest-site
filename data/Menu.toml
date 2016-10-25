@@ -2,18 +2,22 @@
 Name = "DOCUMENTATION"
 URL = "documentation"
 
-[2-download]
+[2-developer]
+Name = "DEVELOPER"
+URL = "developer"
+
+[3-download]
 Name = "DOWNLOAD"
 URL = "download"
 
-[3-community]
+[4-community]
 Name = "COMMUNITY"
 URL = "community"
 
-[4-support]
+[5-support]
 Name = "SUPPORT"
 URL = "support"
 
-#[5-blog]
+#[6-blog]
 #Name = "BLOG"
 #URL = "blog"
