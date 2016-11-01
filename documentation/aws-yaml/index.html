@@ -51,7 +51,7 @@
     },
     "datePublished": "2016-06-06",
     "description": "",
-    "wordCount":  1806 
+    "wordCount":  1878 
   }
 </script>
 
@@ -509,7 +509,7 @@ A network is a subnet that our instances can connect to. This is what allows us 
 
 * **subnet**
  * String that defines the IP address range of the subnet.
- * It must follow CIDR notation as described at: https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing 
+ * It must follow CIDR notation as described at: https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
  * This field is mandatory.
  * This field cannot be null or empty.
  * This field must be unique for this user &amp; all the networks on the manifest.
@@ -573,7 +573,7 @@ Security group egress rules.
 
 * **ip**
  * String that defines the IP address range for this rule.
- * It must follow CIDR notation as described at: https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing 
+ * It must follow CIDR notation as described at: https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
  * This field is mandatory.
  * This field cannot be null or empty.
 
@@ -599,7 +599,7 @@ Security group ingress rules.
 
 * **ip**
  * String that defines the IP address range for this rule.
- * It must follow CIDR notation as described at: https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing 
+ * It must follow CIDR notation as described at: https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
  * This field is mandatory.
  * This field cannot be null or empty.
 
@@ -698,6 +698,8 @@ Instances support the following fields:
 <p>loadbalancers:
   - name: elb-1
     private: false
+    subnets:
+      - web-subnet
     instances:
       - web
     listeners:
@@ -725,6 +727,13 @@ Instances support the following fields:
  * This field is optional.
  * Values can be: “true“ or “false“.
  * This field will default to “false“.
+
+ * **subnets**
+  * Array of String's that defines which public subnet to attach to the ELB.
+  * This field is mandatory if private is set to false.
+  * This field cannot be null or empty.
+  * This field must specify a network/subnet that exists on the yaml.
+  * Only one subnet can be deployed per availablilty zone. It is advised that you specify an AZ when defining a network/subnet.
 
 * **instances**
  * Array of String's that defines which group of instances to add to the ELB.
