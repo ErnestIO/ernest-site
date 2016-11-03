@@ -93,6 +93,8 @@ instances:
 loadbalancers:
   - name: elb-1
     private: false
+    networks:
+      - web
     instances:
       - web
     listeners:
@@ -408,8 +410,8 @@ Loadbalancers support the following fields:
  * Values can be: “true“ or “false“.
  * This field will default to “false“.
 
- * **subnets**
-  * Array of String's that defines which public subnet to attach to the ELB.
+ * **networks**
+  * Array of String's that defines which public network/subnet to attach to the ELB.
   * This field is mandatory if private is set to false.
   * This field cannot be null or empty.
   * This field must specify a network/subnet that exists on the yaml.
