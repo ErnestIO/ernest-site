@@ -615,6 +615,8 @@ instances:
 loadbalancers:
   - name: elb-1
     private: false
+    networks:
+      - web
     instances:
       - web
     listeners:
@@ -638,192 +640,255 @@ s3_buckets:
         permissions: full, read, read-acl, write-acl
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code&gt;
-## Field Reference
+&lt;h2 id=&#34;field-reference&#34;&gt;Field Reference&lt;/h2&gt;
 
-### Service Options
+&lt;h3 id=&#34;service-options&#34;&gt;Service Options&lt;/h3&gt;
 
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;name: demo
+&lt;pre&gt;&lt;code&gt;name: demo
 datacenter: my-dc
 vpc_id: vpc-abcdef01
-vpc_subnet: 10.0.0.0/16&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;
-Service Options support the following fields:
-
-* **name**
- * String that defines the name of the service to build.
- * This field is mandatory.
- * This field cannot be null or empty.
- * The value of this field must be 50 characters maximum.
-
-* **datacenter**
- * String that defines the name of the datacenter where the service is built.
- * This field is mandatory.
- * This field cannot be null or empty.
- * The value of this field must 50 characters maximum.
-
-* **vpc_id**
- * String that defines the ID of the existing VPC the service will use.
- * This field is mandatory, unless **vpc_subnet** is present.
- * This field cannot be null or empty.
- * The value of this field must be 50 characters maximum.
-
-* **vpc_subnet**
- * String that defines the subnet of the VPC that will be created for the service to use.
- * This field is mandatory, unless **vpc_id** is present.
- * This field cannot be null or empty.
- * The value of this field must 50 characters maximum.
-
-### Networking
+vpc_subnet: 10.0.0.0/16
 
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;networks:
+&lt;p&gt;Service Options support the following fields:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;name&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;String that defines the name of the service to build.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;The value of this field must be 50 characters maximum.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;datacenter&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;String that defines the name of the datacenter where the service is built.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;The value of this field must 50 characters maximum.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;vpc_id&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;String that defines the ID of the existing VPC the service will use.&lt;/li&gt;
+&lt;li&gt;This field is mandatory, unless &lt;strong&gt;vpc_subnet&lt;/strong&gt; is present.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;The value of this field must be 50 characters maximum.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;vpc_subnet&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;String that defines the subnet of the VPC that will be created for the service to use.&lt;/li&gt;
+&lt;li&gt;This field is mandatory, unless &lt;strong&gt;vpc_id&lt;/strong&gt; is present.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;The value of this field must 50 characters maximum.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;networking&#34;&gt;Networking&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;networks:
   - name: web
     subnet: 10.0.10.0/24
     public: true
   - name: db
     subnet: 10.0.11.0/24
     public: false
-    nat_gateway: db-nat&lt;/p&gt;
+    nat_gateway: db-nat
 
-&lt;p&gt;nat_gateways:
+nat_gateways:
   - name: db-nat
-    public_network: web&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;
-Networking supports the following fields:
-
-**networks**
-
-A network is a subnet that our instances can connect to. This is what allows us to network/isolate VM’s together.
-
-* **name**
- * String that defines the name of the subnet to build.
- * This field is mandatory.
- * This field cannot be null or empty.
- * The value of this field must be 50 characters maximum.
-
-* **subnet**
- * String that defines the IP address range of the subnet.
- * It must follow CIDR notation as described at: https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
- * This field is mandatory.
- * This field cannot be null or empty.
- * This field must be unique for this user &amp;amp; all the networks on the manifest.
-
-* **public**
- * String that defines if the subnet will be public or private.
- * This field is optional.
- * Values can be: “true“ or “false“.
- * This field will default to “false“.
-
-* **nat_gateway**
- * String that defines the name of the NAT gateway to use for this subnet.
- * This field is optional.
- * This field can be empty.
-
-**nat_gateways**
-
-NAT gateways enable instances in a private subnet to connect to the Internet or other AWS services, but prevent the Internet from initiating a connection with those instances.
-
-* **name**
- * String that defines the name of the NAT gateway to build.
- * This field is mandatory.
- * This field cannot be null or empty.
- * The value of this field must be 50 characters maximum.
-
-* **public_network**
- * String that defines the name of the public network the NAT gateway will reside.
- * This field is mandatory.
- * This field cannot be null or empty.
- * The value of this field must be 50 characters maximum.
-
-### Security Groups
+    public_network: web
 
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;security_groups:
+&lt;p&gt;Networking supports the following fields:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;networks&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;A network is a subnet that our instances can connect to. This is what allows us to network/isolate VM’s together.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;name&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;String that defines the name of the subnet to build.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;The value of this field must be 50 characters maximum.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;subnet&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;String that defines the IP address range of the subnet.&lt;/li&gt;
+&lt;li&gt;It must follow CIDR notation as described at: &lt;a href=&#34;https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing&#34; target=&#34;_blank&#34;&gt;https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;This field must be unique for this user &amp;amp; all the networks on the manifest.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;public&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;String that defines if the subnet will be public or private.&lt;/li&gt;
+&lt;li&gt;This field is optional.&lt;/li&gt;
+&lt;li&gt;Values can be: “true“ or “false“.&lt;/li&gt;
+&lt;li&gt;This field will default to “false“.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;nat_gateway&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;String that defines the name of the NAT gateway to use for this subnet.&lt;/li&gt;
+&lt;li&gt;This field is optional.&lt;/li&gt;
+&lt;li&gt;This field can be empty.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;nat_gateways&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;NAT gateways enable instances in a private subnet to connect to the Internet or other AWS services, but prevent the Internet from initiating a connection with those instances.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;name&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;String that defines the name of the NAT gateway to build.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;The value of this field must be 50 characters maximum.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;public_network&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;String that defines the name of the public network the NAT gateway will reside.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;The value of this field must be 50 characters maximum.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;security-groups&#34;&gt;Security Groups&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;security_groups:
   - name: web-sg
     egress:
       - ip: 0.0.0.0/0
         protocol: any
-        from_port: &amp;lsquo;0&amp;rsquo;
-        to_port: &amp;lsquo;65535&amp;rsquo;
+        from_port: &#39;0&#39;
+        to_port: &#39;65535&#39;
     ingress:
       - ip: 10.0.0.0/16
         protocol: any
-        from_port: &amp;lsquo;0&amp;rsquo;
-        to_port: &amp;lsquo;65535&amp;rsquo;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;
-Security Groups support the following fields:
-
-* **name**
- * String that defines the name of the security group to build.
- * This field is mandatory.
- * This field cannot be null or empty.
- * The value of this field must be 50 characters maximum.
-
-**egress**
-
-Security group egress rules.
-
-* **ip**
- * String that defines the IP address range for this rule.
- * It must follow CIDR notation as described at: https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
- * This field is mandatory.
- * This field cannot be null or empty.
-
-* **protocol**
- * String that defines the protocol for this rule.
- * This field is mandatory.
- * This field cannot be null or empty.
- * Values can be: tcp | udp | icmp | any
-
-* **from_port**
- * Starting port-range number.
- * This field is mandatory.
- * Values can be: 0 - 65535.
-
-* **to_port**
- * Ending port-range number.
- * This field is mandatory.
- * Values can be: 0 - 65535.
-
-**ingress**
-
-Security group ingress rules.
-
-* **ip**
- * String that defines the IP address range for this rule.
- * It must follow CIDR notation as described at: https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
- * This field is mandatory.
- * This field cannot be null or empty.
-
-* **protocol**
- * String that defines the protocol for this rule.
- * This field is mandatory.
- * This field cannot be null or empty.
- * Values can be: tcp | udp | icmp | any
-
-* **from_port**
- * Starting port-range number.
- * This field is mandatory.
- * Values can be: 0 - 65535.
-
-* **to_port**
- * Ending port-range number.
- * This field is mandatory.
- * Values can be: 0 - 65535.
-
-### Instances
+        from_port: &#39;0&#39;
+        to_port: &#39;65535&#39;
 
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;instances:
+&lt;p&gt;Security Groups support the following fields:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;name&lt;/strong&gt;
+
+&lt;ul&gt;
+&lt;li&gt;String that defines the name of the security group to build.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;The value of this field must be 50 characters maximum.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;egress&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Security group egress rules.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;ip&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;String that defines the IP address range for this rule.&lt;/li&gt;
+&lt;li&gt;It must follow CIDR notation as described at: &lt;a href=&#34;https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing&#34; target=&#34;_blank&#34;&gt;https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;protocol&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;String that defines the protocol for this rule.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;Values can be: tcp | udp | icmp | any&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;from_port&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Starting port-range number.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;Values can be: 0 - 65535.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;to_port&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Ending port-range number.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;Values can be: 0 - 65535.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;ingress&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Security group ingress rules.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;ip&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;String that defines the IP address range for this rule.&lt;/li&gt;
+&lt;li&gt;It must follow CIDR notation as described at: &lt;a href=&#34;https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing&#34; target=&#34;_blank&#34;&gt;https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;protocol&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;String that defines the protocol for this rule.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;Values can be: tcp | udp | icmp | any&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;from_port&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Starting port-range number.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;Values can be: 0 - 65535.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;to_port&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Ending port-range number.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;Values can be: 0 - 65535.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;instances&#34;&gt;Instances&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;instances:
   - name: web
     elastic_ip: true
     type: t2.micro
@@ -833,69 +898,97 @@ Security group ingress rules.
     count: 1
     key_pair: web-key
     security_groups:
-      - web-sg&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;
-Instances support the following fields:
-
-* **name**
- * String that defines the name of the instance to build.
- * This field is mandatory.
- * This field cannot be null or empty.
- * This field must be unique by user &amp;amp; manifest.
- * The value of this field must be 50 characters maximum.
-
-* **elastic_ip**
- * String that defines if the instance will be assigned an elastic IP.
- * This field is optional.
- * Values can be: “true“ or “false“.
- * This field will default to “false“.
-
-* **type**
- * String that defines the instance size.
- * This field is mandatory.
- * This field cannot be null or empty.
- * This field must be a valid AWS EC2 size.
-
-* **image**
- * String that defines the name of an AMI to install.
- * This field is mandatory.
- * This field cannot be null or empty.
-
-* **network:**
- * String that defines the name of a network to attach this instance.
- * This field is mandatory.
- * This field cannot be null or empty.
- * The value of this field should exist on the networks section previously specified.
-
-* **start_ip:**
- * String that defines the starting IP to allocate the VMs to be built.
- * This field is mandatory.
- * This field cannot be null or empty.
- * This field must be a valid IP.
- * This IP should belong to the network already defined on the instance.
-
-* **count**
- * Integer that defines the number of instances to be created.
- * This field is mandatory.
- * This field cannot be null or empty.
- * This field must be greater or equal that 1
-
-* **key_pair**
- * String that specifies the key pair to be used to login to the instances.
- * This field is optional.
- * This field cannot be null or empty.
-
-* **security_groups**
- * Array that contains security groups that will be applied to the instances.
- * This field is optional.
- * This field can be empty.
-
-### Load Balancers
+      - web-sg
 
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;loadbalancers:
+&lt;p&gt;Instances support the following fields:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;name&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;String that defines the name of the instance to build.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;This field must be unique by user &amp;amp; manifest.&lt;/li&gt;
+&lt;li&gt;The value of this field must be 50 characters maximum.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;elastic_ip&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;String that defines if the instance will be assigned an elastic IP.&lt;/li&gt;
+&lt;li&gt;This field is optional.&lt;/li&gt;
+&lt;li&gt;Values can be: “true“ or “false“.&lt;/li&gt;
+&lt;li&gt;This field will default to “false“.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;type&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;String that defines the instance size.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;This field must be a valid AWS EC2 size.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;image&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;String that defines the name of an AMI to install.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;network:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;String that defines the name of a network to attach this instance.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;The value of this field should exist on the networks section previously specified.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;start_ip:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;String that defines the starting IP to allocate the VMs to be built.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;This field must be a valid IP.&lt;/li&gt;
+&lt;li&gt;This IP should belong to the network already defined on the instance.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;count&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Integer that defines the number of instances to be created.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;This field must be greater or equal that 1&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;key_pair&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;String that specifies the key pair to be used to login to the instances.&lt;/li&gt;
+&lt;li&gt;This field is optional.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;security_groups&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Array that contains security groups that will be applied to the instances.&lt;/li&gt;
+&lt;li&gt;This field is optional.&lt;/li&gt;
+&lt;li&gt;This field can be empty.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;load-balancers&#34;&gt;Load Balancers&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;loadbalancers:
   - name: elb-1
     private: false
     subnets:
@@ -911,72 +1004,105 @@ Instances support the following fields:
         protocol: https
         ssl_cert: ssl-cert-id
     security_groups:
-      - web-sg&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Loadbalancers support the following fields:
-
-* **name**
- * String that defines the name of the instance to build.
- * This field is mandatory.
- * This field cannot be null or empty.
- * This field must be unique by user &amp;amp;amp; manifest.
- * The value of this field must be 50 characters maximum.
-
-* **private**
- * Boolean that defines if the loadbalancer will be private or public.
- * This field is optional.
- * Values can be: “true“ or “false“.
- * This field will default to “false“.
-
- * **subnets**
-  * Array of String&#39;s that defines which public subnet to attach to the ELB.
-  * This field is mandatory if private is set to false.
-  * This field cannot be null or empty.
-  * This field must specify a network/subnet that exists on the yaml.
-  * Only one subnet can be deployed per availablilty zone. It is advised that you specify an AZ when defining a network/subnet.
-
-* **instances**
- * Array of String&#39;s that defines which group of instances to add to the ELB.
- * This field is mandatory.
- * This field cannot be null or empty.
- * This field must specify an instance group that exists on the yaml.
-
-* **security_groups**
- * Array of String&#39;s that defines which security groups to apply to the ELB.
- * This field not is mandatory.
- * This field must specify a security group that exists on the yaml.
-
-**listeners**
-
-ELB Listeners.
-
-* **protocol**
- * String that defines the protocol for this rule.
- * This field is mandatory.
- * This field cannot be null or empty.
- * Values can be: http | https | ssl | tcp
- * If https or ssl is specified, an ssl_cert must be specified.
-
-* **from_port**
- * Starting port-range number.
- * This field is mandatory.
- * Values can be: 1 - 65535.
-
-* **to_port**
- * Ending port-range number.
- * This field is mandatory.
- * Values can be: 1 - 65535.
-
-* **ssl_cert**
- * The ssl certificate ID of a valid AWS Certificate Manager (ACM) cert.
- * This field is mandatory only if protocol is set to https or ssl.
-
-
-### S3 Buckets
+      - web-sg
 
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;s3_buckets:
+&lt;p&gt;Loadbalancers support the following fields:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;name&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;String that defines the name of the instance to build.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;This field must be unique by user &amp;amp; manifest.&lt;/li&gt;
+&lt;li&gt;The value of this field must be 50 characters maximum.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;private&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Boolean that defines if the loadbalancer will be private or public.&lt;/li&gt;
+&lt;li&gt;This field is optional.&lt;/li&gt;
+&lt;li&gt;Values can be: “true“ or “false“.&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;This field will default to “false“.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;networks&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Array of String&amp;rsquo;s that defines which public network/subnet to attach to the ELB.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;This field is mandatory if private is set to false.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;This field cannot be null or empty.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;This field must specify a network/subnet that exists on the yaml.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Only one subnet can be deployed per availablilty zone. It is advised that you specify an AZ when defining a network/subnet.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;instances&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Array of String&amp;rsquo;s that defines which group of instances to add to the ELB.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;This field must specify an instance group that exists on the yaml.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;security_groups&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Array of String&amp;rsquo;s that defines which security groups to apply to the ELB.&lt;/li&gt;
+&lt;li&gt;This field not is mandatory.&lt;/li&gt;
+&lt;li&gt;This field must specify a security group that exists on the yaml.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;listeners&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;ELB Listeners.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;protocol&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;String that defines the protocol for this rule.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;Values can be: http | https | ssl | tcp&lt;/li&gt;
+&lt;li&gt;If https or ssl is specified, an ssl_cert must be specified.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;from_port&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Starting port-range number.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;Values can be: 1 - 65535.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;to_port&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Ending port-range number.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;Values can be: 1 - 65535.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;ssl_cert&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The ssl certificate ID of a valid AWS Certificate Manager (ACM) cert.&lt;/li&gt;
+&lt;li&gt;This field is mandatory only if protocol is set to https or ssl.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;s3-buckets&#34;&gt;S3 Buckets&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;s3_buckets:
   - name: bucket-1
     acl: private
     bucket_location: eu-west-1
@@ -984,7 +1110,7 @@ ELB Listeners.
       - id: foo
         type: emailaddress, id, uri
         permissions: full, read, read-acl, write-acl
-```&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;S3 support the following fields:&lt;/p&gt;
 
@@ -1153,7 +1279,7 @@ DESCRIPTION:
    ernest info - Display system-wide information.
 
 USAGE:
-   ernest info
+   ernest info  
 
 DESCRIPTION:
    Displays ernest instance information.
@@ -1168,7 +1294,7 @@ DESCRIPTION:
    ernest login - Login with your Ernest credentials.
 
 USAGE:
-   ernest login [command options]
+   ernest login [command options]  
 
 DESCRIPTION:
    Logs an user into Ernest instance.
@@ -1193,7 +1319,7 @@ OPTIONS:
    ernest logout - Clear local authentication credentials.
 
 USAGE:
-   ernest logout
+   ernest logout  
 
 DESCRIPTION:
    Logs out an user from Ernest instance.
@@ -1208,7 +1334,7 @@ DESCRIPTION:
    ernest user list - List available users.
 
 USAGE:
-   ernest user list
+   ernest user list  
 
 DESCRIPTION:
    List available users.
@@ -1258,7 +1384,7 @@ DESCRIPTION:
     or changing a change-password by being admin:
 
     $ ernest user change-password --user &amp;lt;username&amp;gt; --current-password &amp;lt;current-password&amp;gt; --password &amp;lt;new-password&amp;gt;
-
+  
 
 OPTIONS:
    --user value              The username of the user to change password
@@ -1287,7 +1413,7 @@ DESCRIPTION:
    ernest group delete - Deletes a group.
 
 USAGE:
-   ernest group delete
+   ernest group delete  
 
 DESCRIPTION:
    Deletes a group by name
@@ -1296,13 +1422,28 @@ DESCRIPTION:
       $ ernest group delete &amp;lt;name&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;p&gt;&lt;code&gt;ernest group list&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NAME:
+   ernest group list - List available groups.
+
+USAGE:
+   ernest group list  
+
+DESCRIPTION:
+   List available groups.
+
+   Example:
+    $ ernest group list
+&lt;/code&gt;&lt;/pre&gt;
+
 &lt;p&gt;&lt;code&gt;ernest group create&lt;/code&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;NAME:
    ernest group create - Create a group.
 
 USAGE:
-   ernest group create
+   ernest group create  
 
 DESCRIPTION:
    Create a group.
@@ -1317,7 +1458,7 @@ DESCRIPTION:
    ernest group add-user - Adds a user to a group.
 
 USAGE:
-   ernest group add-user
+   ernest group add-user  
 
 DESCRIPTION:
    Adds a user to a group.
@@ -1332,7 +1473,7 @@ DESCRIPTION:
    ernest group remove-user - Removes an user from a group.
 
 USAGE:
-   ernest group remove-user
+   ernest group remove-user  
 
 DESCRIPTION:
    Removes an user from a group.
@@ -1347,7 +1488,7 @@ DESCRIPTION:
    ernest group add-datacenter - Adds a datacenter to a group.
 
 USAGE:
-   ernest group add-datacenter
+   ernest group add-datacenter  
 
 DESCRIPTION:
    Adds a datacenter to a group.
@@ -1362,7 +1503,7 @@ DESCRIPTION:
    ernest group remove-datacenter - Removes a datacenter from a group.
 
 USAGE:
-   ernest group remove-datacenter
+   ernest group remove-datacenter  
 
 DESCRIPTION:
    Removes an datacenter from a group.
@@ -1377,45 +1518,13 @@ DESCRIPTION:
    ernest datacenter list - List available datacenters.
 
 USAGE:
-   ernest datacenter list
+   ernest datacenter list  
 
 DESCRIPTION:
    List available datacenters.
 
    Example:
     $ ernest datacenter list
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;ernest datacenter create aws&lt;/code&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;NAME:
-   ernest datacenter create aws - Create a new aws datacenter.
-
-USAGE:
-   ernest datacenter create aws [command options] &amp;lt;datacenter-name&amp;gt;
-
-DESCRIPTION:
-   Create a new AWS datacenter on the targeted instance of Ernest.
-
-  Example:
-   $ ernest datacenter create aws --region region --token token --secret secret my_datacenter
-
-   Template example:
-    $ ernest datacenter create aws --template mydatacenter.yml mydatacenter
-    Where mydatacenter.yaml will look like:
-      ---
-      fake: true
-      token: token
-      secret: secret
-      region: region
-
-
-OPTIONS:
-   --region value    Datacenter region
-   --token value     AWS Token
-   --secret value    AWS Secret
-   --template value  Datacenter template
-   --fake            Fake datacenter
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;code&gt;ernest datacenter create vcloud&lt;/code&gt;&lt;/p&gt;
@@ -1444,7 +1553,7 @@ DESCRIPTION:
       vcloud-url: &amp;quot;http://ss.com&amp;quot;
       vse-url: &amp;quot;http://ss.com&amp;quot;
 
-
+  
 
 OPTIONS:
    --user value            Your VCloud valid user name
@@ -1457,13 +1566,101 @@ OPTIONS:
    --fake                  Fake datacenter
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;p&gt;&lt;code&gt;ernest datacenter create aws&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NAME:
+   ernest datacenter create aws - Create a new aws datacenter.
+
+USAGE:
+   ernest datacenter create aws [command options] &amp;lt;datacenter-name&amp;gt;
+
+DESCRIPTION:
+   Create a new AWS datacenter on the targeted instance of Ernest.
+
+  Example:
+   $ ernest datacenter create aws --region region --token token --secret secret my_datacenter
+
+   Template example:
+    $ ernest datacenter create aws --template mydatacenter.yml mydatacenter
+    Where mydatacenter.yaml will look like:
+      ---
+      fake: true
+      token: token
+      secret: secret
+      region: region
+   
+
+OPTIONS:
+   --region value    Datacenter region
+   --token value     AWS Token
+   --secret value    AWS Secret
+   --template value  Datacenter template
+   --fake            Fake datacenter
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;ernest datacenter update vcloud&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NAME:
+   ernest datacenter update vcloud - Updates the specified VCloud datacenter.
+
+USAGE:
+   ernest datacenter update vcloud [command options] &amp;lt;datacenter-name&amp;gt;
+
+DESCRIPTION:
+   Updates the specified VCloud datacenter.
+
+   Example:
+    $ ernest datacenter update vcloud --user &amp;lt;me&amp;gt; --org &amp;lt;org&amp;gt; --password &amp;lt;secret&amp;gt; my_datacenter
+  
+
+OPTIONS:
+   --user value      Your VCloud valid user name
+   --password value  Your VCloud valid password
+   --org value       Your vCloud Organization
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;ernest datacenter update aws&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NAME:
+   ernest datacenter update aws - Updates the specified AWS datacenter.
+
+USAGE:
+   ernest datacenter update aws [command options] &amp;lt;datacenter-name&amp;gt;
+
+DESCRIPTION:
+   Updates the specified AWS datacenter.
+
+   Example:
+    $ ernest datacenter update aws --token &amp;lt;my_token&amp;gt; --secret &amp;lt;mysecret&amp;gt; my_datacenter
+  
+
+OPTIONS:
+   --token value   Your AWS valid token
+   --secret value  Your AWS valid secret
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;ernest datacenter delete&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NAME:
+   ernest datacenter delete - Deletes the specified datacenter.
+
+USAGE:
+   ernest datacenter delete &amp;lt;datacenter-name&amp;gt;
+
+DESCRIPTION:
+   Deletes the name specified datacenter.
+
+   Example:
+    $ ernest datacenter delete my_datacenter
+&lt;/code&gt;&lt;/pre&gt;
+
 &lt;p&gt;&lt;code&gt;ernest service list&lt;/code&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;NAME:
    ernest service list - List available services.
 
 USAGE:
-   ernest service list
+   ernest service list  
 
 DESCRIPTION:
    List available services and shows its most relevant information.
@@ -1506,7 +1703,7 @@ DESCRIPTION:
   
 
 OPTIONS:
-   --yes, -y  Force destroy command without asking for permission.
+   --force, -f  Force destroy command without asking for permission.
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;code&gt;ernest service history&lt;/code&gt;&lt;/p&gt;
@@ -1582,22 +1779,72 @@ OPTIONS:
 &lt;p&gt;&lt;code&gt;ernest service monitor&lt;/code&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;NAME:
-   ernest service info - $ ernest service info &amp;lt;my_service&amp;gt; --build &amp;lt;specific build&amp;gt;
+   ernest service monitor - Monitor a service.
 
 USAGE:
-   ernest service info [command options] &amp;lt;service_name&amp;gt;
+   ernest service monitor &amp;lt;service_name&amp;gt;
 
 DESCRIPTION:
-   Will show detailed information of the last build of a specified service.
-  In case you specify --build option you will be able to output the detailed information of specific build of a service.
+   Monitors a service while it is being built by its service name.
 
-   Examples:
-    $ ernest service definition myservice
-    $ ernest service definition myservice --build build1
+   Example:
+    $ ernest monitor my_service
+&lt;/code&gt;&lt;/pre&gt;
 
+&lt;p&gt;&lt;code&gt;ernest preferences logger list&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NAME:
+   ernest preferences logger list - Lists active loggers.
+
+USAGE:
+   ernest preferences logger list  
+
+DESCRIPTION:
+   List active loggers.
+
+   Example:
+    $ ernest preferences logger list
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;ernest preferences logger add&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NAME:
+   ernest preferences logger add - Creates / updates a logger based on its type.
+
+USAGE:
+   ernest preferences logger add [command options]  
+
+DESCRIPTION:
+   Creates / updates a logger based on its types.
+
+   Example:
+    $ ernest preferences logger add basic --logfile /tmp/ernest.log
+    $ ernest preferences logger add logstash --hostname 10.50.1.1 --port 5000 --timeout 50000
+    $ ernest preferences logger add rollbar --token MY_ROLLBAR_TOKEN
+  
 
 OPTIONS:
-   --build value  Build ID
+   --logfile value   Specify the path for the loging file
+   --token value     Rollbar token
+   --env value       Rollbar environment
+   --hostname value  Logstash hostname
+   --port value      Logstash port (default: 0)
+   --timeout value   Logstash timeout (default: 0)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;ernest preferences logger delete&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NAME:
+   ernest preferences logger delete - Deletes a logger based on its type.
+
+USAGE:
+   ernest preferences logger delete  
+
+DESCRIPTION:
+   Deletes a logger based on its types.
+
+   Example:
+    $ ernest preferences logger delete basic
 &lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
@@ -1764,6 +2011,7 @@ Current user : &amp;lt;user&amp;gt;
 &lt;li&gt;&lt;a href=&#34;https://aws.amazon.com/ec2/&#34; target=&#34;_blank&#34;&gt;EC2&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://aws.amazon.com/vpc/&#34; target=&#34;_blank&#34;&gt;VPC&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://aws.amazon.com/elasticloadbalancing/&#34; target=&#34;_blank&#34;&gt;ELB&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://aws.amazon.com/s3/&#34; target=&#34;_blank&#34;&gt;S3&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;next-steps&#34;&gt;Next Steps&lt;/h2&gt;
@@ -2542,6 +2790,9 @@ instances:
     image: r3/ubuntu-1404
     cpus: 1
     memory: 1GB
+    disks:
+     - 10GB
+    root_disk: 32GB
     count: 1
     networks:
       name: web
@@ -2550,6 +2801,12 @@ instances:
       - exec:
         - &#39;sudo apt-get update&#39;
         - &#39;sudo apt-get install apache2 -y&#39;
+      - shell:
+        - #!/bin/sh
+        - if [ x$1 == x&amp;quot;postcustomization&amp;quot; ]; then
+        - yum -y install httpd
+        - service httpd start
+        - fi 
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;field-reference&#34;&gt;Field Reference&lt;/h2&gt;
@@ -2794,6 +3051,9 @@ ernest_ip:
     image: r3/ubuntu-1404
     cpus: 1
     memory: 1GB
+    disks:
+     - 10GB
+    root_disk: 32GB
     count: 1
     networks:
       name: web
@@ -2802,6 +3062,12 @@ ernest_ip:
       - exec:
         - &#39;sudo apt-get update&#39;
         - &#39;sudo apt-get install apache2 -y&#39;
+      - shell:
+        - #!/bin/sh
+        - if [ x$1 == x&amp;quot;postcustomization&amp;quot; ]; then
+        - yum -y install httpd
+        - service httpd start
+        - fi 
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Instances support the following fields:&lt;/p&gt;
@@ -2856,6 +3122,17 @@ ernest_ip:
 &lt;li&gt;The possible binary prefixes are MB, GB, TB, PB, YB&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
 
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;root_disk&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;String that defines the root disk size of the template the instance is based on.&lt;/li&gt;
+&lt;li&gt;This field is optional.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;The value must be larger than the default root disk size of the template.&lt;/li&gt;
+&lt;li&gt;Each element of the string must follow the Binary Prefix format: &lt;a href=&#34;https://en.wikipedia.org/wiki/Binary_prefix#Hard_disk_drives&#34; target=&#34;_blank&#34;&gt;https://en.wikipedia.org/wiki/Binary_prefix#Hard_disk_drives&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;The possible binary prefixes are MB, GB, TB, PB, YB&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
 &lt;li&gt;&lt;p&gt;&lt;strong&gt;count&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
@@ -2888,16 +3165,13 @@ Networks is a map with two fields&lt;/p&gt;
 &lt;li&gt;This field must be a valid IP.&lt;/li&gt;
 &lt;li&gt;This IP should belong to the network already defined on the instance.&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;provisioner&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;provisioner&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Provisioner defines the available provisioner mechanisms.&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;Array that contains provisioner types&lt;/li&gt;
-&lt;li&gt;Each provisioner type will be run in the order they are specified in the document&lt;/li&gt;
-&lt;li&gt;This field is optional&lt;/li&gt;
-&lt;li&gt;This field can be empty&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-
 &lt;li&gt;&lt;p&gt;&lt;strong&gt;exec&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
@@ -2905,6 +3179,17 @@ Networks is a map with two fields&lt;/p&gt;
 &lt;li&gt;Each command in the exec array is concatenated together and delimited by a semicolon.&lt;/li&gt;
 &lt;li&gt;This field is optional&lt;/li&gt;
 &lt;li&gt;If specified as a provisioner type, this array field must contain at least one element&lt;/li&gt;
+&lt;li&gt;The specified commands will be executed by the SALT master.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;shell&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Array of strings, any command characters must be escaped with backslashes: (RFC7159, Section 7)&lt;/li&gt;
+&lt;li&gt;Each command in the exec array is concatenated together and delimited by a semicolon.&lt;/li&gt;
+&lt;li&gt;This field is optional&lt;/li&gt;
+&lt;li&gt;If specified as a provisioner type, this array field must contain at least one element&lt;/li&gt;
+&lt;li&gt;The specified commands will be executed by the vCloud guest customization script.&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </description>

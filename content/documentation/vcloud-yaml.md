@@ -62,6 +62,9 @@ instances:
     image: r3/ubuntu-1404
     cpus: 1
     memory: 1GB
+    disks:
+     - 10GB
+    root_disk: 32GB
     count: 1
     networks:
       name: web
@@ -70,6 +73,12 @@ instances:
       - exec:
         - 'sudo apt-get update'
         - 'sudo apt-get install apache2 -y'
+      - shell:
+        - #!/bin/sh
+        - if [ x$1 == x"postcustomization" ]; then
+        - yum -y install httpd
+        - service httpd start
+        - fi 
 ```
 
 ## Field Reference
@@ -252,6 +261,9 @@ instances:
     image: r3/ubuntu-1404
     cpus: 1
     memory: 1GB
+    disks:
+     - 10GB
+    root_disk: 32GB
     count: 1
     networks:
       name: web
@@ -260,6 +272,12 @@ instances:
       - exec:
         - 'sudo apt-get update'
         - 'sudo apt-get install apache2 -y'
+      - shell:
+        - #!/bin/sh
+        - if [ x$1 == x"postcustomization" ]; then
+        - yum -y install httpd
+        - service httpd start
+        - fi 
 ```
 
 Instances support the following fields:
@@ -298,6 +316,14 @@ Instances support the following fields:
  * Each element of the string must follow the Binary Prefix format: https://en.wikipedia.org/wiki/Binary_prefix#Hard_disk_drives 
  * The possible binary prefixes are MB, GB, TB, PB, YB
 
+* **root_disk**
+ * String that defines the root disk size of the template the instance is based on.
+ * This field is optional.
+ * This field cannot be null or empty.
+ * The value must be larger than the default root disk size of the template.
+ * Each element of the string must follow the Binary Prefix format: https://en.wikipedia.org/wiki/Binary_prefix#Hard_disk_drives 
+ * The possible binary prefixes are MB, GB, TB, PB, YB
+
 * **count**
  * Integer that defines the number of VM to be created.
  * This field is mandatory.
@@ -323,15 +349,20 @@ Networks is a map with two fields
  * This IP should belong to the network already defined on the instance.
 
 
-* **provisioner**
- * Array that contains provisioner types
- * Each provisioner type will be run in the order they are specified in the document
- * This field is optional
- * This field can be empty
+**provisioner**
 
+Provisioner defines the available provisioner mechanisms.
 
 * **exec**
  * Array of strings, any command characters must be escaped with backslashes: (RFC7159, Section 7)
  * Each command in the exec array is concatenated together and delimited by a semicolon.
  * This field is optional
  * If specified as a provisioner type, this array field must contain at least one element
+ * The specified commands will be executed by the SALT master.
+
+* **shell**
+ * Array of strings, any command characters must be escaped with backslashes: (RFC7159, Section 7)
+ * Each command in the exec array is concatenated together and delimited by a semicolon.
+ * This field is optional
+ * If specified as a provisioner type, this array field must contain at least one element
+ * The specified commands will be executed by the vCloud guest customization script.

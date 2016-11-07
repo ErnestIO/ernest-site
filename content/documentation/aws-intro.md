@@ -21,6 +21,7 @@ The following AWS services are supported by Ernest:
 * [EC2](https://aws.amazon.com/ec2/)
 * [VPC](https://aws.amazon.com/vpc/)
 * [ELB](https://aws.amazon.com/elasticloadbalancing/)
+* [S3](https://aws.amazon.com/s3/)
 
 ## Next Steps
 

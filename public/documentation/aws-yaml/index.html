@@ -51,7 +51,7 @@
     },
     "datePublished": "2016-06-06",
     "description": "",
-    "wordCount":  1878 
+    "wordCount":  1695 
   }
 </script>
 
@@ -415,6 +415,8 @@ instances:
 loadbalancers:
   - name: elb-1
     private: false
+    networks:
+      - web
     instances:
       - web
     listeners:
@@ -438,192 +440,255 @@ s3_buckets:
         permissions: full, read, read-acl, write-acl
 </code></pre>
 
-<pre><code>
-## Field Reference
+<h2 id="field-reference">Field Reference</h2>
 
-### Service Options
+<h3 id="service-options">Service Options</h3>
 
-</code></pre>
-
-<p>name: demo
+<pre><code>name: demo
 datacenter: my-dc
 vpc_id: vpc-abcdef01
-vpc_subnet: 10.0.0.0/16</p>
-
-<pre><code>
-Service Options support the following fields:
-
-* **name**
- * String that defines the name of the service to build.
- * This field is mandatory.
- * This field cannot be null or empty.
- * The value of this field must be 50 characters maximum.
-
-* **datacenter**
- * String that defines the name of the datacenter where the service is built.
- * This field is mandatory.
- * This field cannot be null or empty.
- * The value of this field must 50 characters maximum.
-
-* **vpc_id**
- * String that defines the ID of the existing VPC the service will use.
- * This field is mandatory, unless **vpc_subnet** is present.
- * This field cannot be null or empty.
- * The value of this field must be 50 characters maximum.
-
-* **vpc_subnet**
- * String that defines the subnet of the VPC that will be created for the service to use.
- * This field is mandatory, unless **vpc_id** is present.
- * This field cannot be null or empty.
- * The value of this field must 50 characters maximum.
-
-### Networking
+vpc_subnet: 10.0.0.0/16
 
 </code></pre>
 
-<p>networks:
+<p>Service Options support the following fields:</p>
+
+<ul>
+<li><p><strong>name</strong></p>
+
+<ul>
+<li>String that defines the name of the service to build.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+<li>The value of this field must be 50 characters maximum.</li>
+</ul></li>
+
+<li><p><strong>datacenter</strong></p>
+
+<ul>
+<li>String that defines the name of the datacenter where the service is built.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+<li>The value of this field must 50 characters maximum.</li>
+</ul></li>
+
+<li><p><strong>vpc_id</strong></p>
+
+<ul>
+<li>String that defines the ID of the existing VPC the service will use.</li>
+<li>This field is mandatory, unless <strong>vpc_subnet</strong> is present.</li>
+<li>This field cannot be null or empty.</li>
+<li>The value of this field must be 50 characters maximum.</li>
+</ul></li>
+
+<li><p><strong>vpc_subnet</strong></p>
+
+<ul>
+<li>String that defines the subnet of the VPC that will be created for the service to use.</li>
+<li>This field is mandatory, unless <strong>vpc_id</strong> is present.</li>
+<li>This field cannot be null or empty.</li>
+<li>The value of this field must 50 characters maximum.</li>
+</ul></li>
+</ul>
+
+<h3 id="networking">Networking</h3>
+
+<pre><code>networks:
   - name: web
     subnet: 10.0.10.0/24
     public: true
   - name: db
     subnet: 10.0.11.0/24
     public: false
-    nat_gateway: db-nat</p>
+    nat_gateway: db-nat
 
-<p>nat_gateways:
+nat_gateways:
   - name: db-nat
-    public_network: web</p>
-
-<pre><code>
-Networking supports the following fields:
-
-**networks**
-
-A network is a subnet that our instances can connect to. This is what allows us to network/isolate VM’s together.
-
-* **name**
- * String that defines the name of the subnet to build.
- * This field is mandatory.
- * This field cannot be null or empty.
- * The value of this field must be 50 characters maximum.
-
-* **subnet**
- * String that defines the IP address range of the subnet.
- * It must follow CIDR notation as described at: https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
- * This field is mandatory.
- * This field cannot be null or empty.
- * This field must be unique for this user &amp; all the networks on the manifest.
-
-* **public**
- * String that defines if the subnet will be public or private.
- * This field is optional.
- * Values can be: “true“ or “false“.
- * This field will default to “false“.
-
-* **nat_gateway**
- * String that defines the name of the NAT gateway to use for this subnet.
- * This field is optional.
- * This field can be empty.
-
-**nat_gateways**
-
-NAT gateways enable instances in a private subnet to connect to the Internet or other AWS services, but prevent the Internet from initiating a connection with those instances.
-
-* **name**
- * String that defines the name of the NAT gateway to build.
- * This field is mandatory.
- * This field cannot be null or empty.
- * The value of this field must be 50 characters maximum.
-
-* **public_network**
- * String that defines the name of the public network the NAT gateway will reside.
- * This field is mandatory.
- * This field cannot be null or empty.
- * The value of this field must be 50 characters maximum.
-
-### Security Groups
+    public_network: web
 
 </code></pre>
 
-<p>security_groups:
+<p>Networking supports the following fields:</p>
+
+<p><strong>networks</strong></p>
+
+<p>A network is a subnet that our instances can connect to. This is what allows us to network/isolate VM’s together.</p>
+
+<ul>
+<li><p><strong>name</strong></p>
+
+<ul>
+<li>String that defines the name of the subnet to build.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+<li>The value of this field must be 50 characters maximum.</li>
+</ul></li>
+
+<li><p><strong>subnet</strong></p>
+
+<ul>
+<li>String that defines the IP address range of the subnet.</li>
+<li>It must follow CIDR notation as described at: <a href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing" target="_blank">https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing</a></li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+<li>This field must be unique for this user &amp; all the networks on the manifest.</li>
+</ul></li>
+
+<li><p><strong>public</strong></p>
+
+<ul>
+<li>String that defines if the subnet will be public or private.</li>
+<li>This field is optional.</li>
+<li>Values can be: “true“ or “false“.</li>
+<li>This field will default to “false“.</li>
+</ul></li>
+
+<li><p><strong>nat_gateway</strong></p>
+
+<ul>
+<li>String that defines the name of the NAT gateway to use for this subnet.</li>
+<li>This field is optional.</li>
+<li>This field can be empty.</li>
+</ul></li>
+</ul>
+
+<p><strong>nat_gateways</strong></p>
+
+<p>NAT gateways enable instances in a private subnet to connect to the Internet or other AWS services, but prevent the Internet from initiating a connection with those instances.</p>
+
+<ul>
+<li><p><strong>name</strong></p>
+
+<ul>
+<li>String that defines the name of the NAT gateway to build.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+<li>The value of this field must be 50 characters maximum.</li>
+</ul></li>
+
+<li><p><strong>public_network</strong></p>
+
+<ul>
+<li>String that defines the name of the public network the NAT gateway will reside.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+<li>The value of this field must be 50 characters maximum.</li>
+</ul></li>
+</ul>
+
+<h3 id="security-groups">Security Groups</h3>
+
+<pre><code>security_groups:
   - name: web-sg
     egress:
       - ip: 0.0.0.0/0
         protocol: any
-        from_port: &lsquo;0&rsquo;
-        to_port: &lsquo;65535&rsquo;
+        from_port: '0'
+        to_port: '65535'
     ingress:
       - ip: 10.0.0.0/16
         protocol: any
-        from_port: &lsquo;0&rsquo;
-        to_port: &lsquo;65535&rsquo;</p>
-
-<pre><code>
-Security Groups support the following fields:
-
-* **name**
- * String that defines the name of the security group to build.
- * This field is mandatory.
- * This field cannot be null or empty.
- * The value of this field must be 50 characters maximum.
-
-**egress**
-
-Security group egress rules.
-
-* **ip**
- * String that defines the IP address range for this rule.
- * It must follow CIDR notation as described at: https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
- * This field is mandatory.
- * This field cannot be null or empty.
-
-* **protocol**
- * String that defines the protocol for this rule.
- * This field is mandatory.
- * This field cannot be null or empty.
- * Values can be: tcp | udp | icmp | any
-
-* **from_port**
- * Starting port-range number.
- * This field is mandatory.
- * Values can be: 0 - 65535.
-
-* **to_port**
- * Ending port-range number.
- * This field is mandatory.
- * Values can be: 0 - 65535.
-
-**ingress**
-
-Security group ingress rules.
-
-* **ip**
- * String that defines the IP address range for this rule.
- * It must follow CIDR notation as described at: https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
- * This field is mandatory.
- * This field cannot be null or empty.
-
-* **protocol**
- * String that defines the protocol for this rule.
- * This field is mandatory.
- * This field cannot be null or empty.
- * Values can be: tcp | udp | icmp | any
-
-* **from_port**
- * Starting port-range number.
- * This field is mandatory.
- * Values can be: 0 - 65535.
-
-* **to_port**
- * Ending port-range number.
- * This field is mandatory.
- * Values can be: 0 - 65535.
-
-### Instances
+        from_port: '0'
+        to_port: '65535'
 
 </code></pre>
 
-<p>instances:
+<p>Security Groups support the following fields:</p>
+
+<ul>
+<li><strong>name</strong>
+
+<ul>
+<li>String that defines the name of the security group to build.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+<li>The value of this field must be 50 characters maximum.</li>
+</ul></li>
+</ul>
+
+<p><strong>egress</strong></p>
+
+<p>Security group egress rules.</p>
+
+<ul>
+<li><p><strong>ip</strong></p>
+
+<ul>
+<li>String that defines the IP address range for this rule.</li>
+<li>It must follow CIDR notation as described at: <a href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing" target="_blank">https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing</a></li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+</ul></li>
+
+<li><p><strong>protocol</strong></p>
+
+<ul>
+<li>String that defines the protocol for this rule.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+<li>Values can be: tcp | udp | icmp | any</li>
+</ul></li>
+
+<li><p><strong>from_port</strong></p>
+
+<ul>
+<li>Starting port-range number.</li>
+<li>This field is mandatory.</li>
+<li>Values can be: 0 - 65535.</li>
+</ul></li>
+
+<li><p><strong>to_port</strong></p>
+
+<ul>
+<li>Ending port-range number.</li>
+<li>This field is mandatory.</li>
+<li>Values can be: 0 - 65535.</li>
+</ul></li>
+</ul>
+
+<p><strong>ingress</strong></p>
+
+<p>Security group ingress rules.</p>
+
+<ul>
+<li><p><strong>ip</strong></p>
+
+<ul>
+<li>String that defines the IP address range for this rule.</li>
+<li>It must follow CIDR notation as described at: <a href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing" target="_blank">https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing</a></li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+</ul></li>
+
+<li><p><strong>protocol</strong></p>
+
+<ul>
+<li>String that defines the protocol for this rule.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+<li>Values can be: tcp | udp | icmp | any</li>
+</ul></li>
+
+<li><p><strong>from_port</strong></p>
+
+<ul>
+<li>Starting port-range number.</li>
+<li>This field is mandatory.</li>
+<li>Values can be: 0 - 65535.</li>
+</ul></li>
+
+<li><p><strong>to_port</strong></p>
+
+<ul>
+<li>Ending port-range number.</li>
+<li>This field is mandatory.</li>
+<li>Values can be: 0 - 65535.</li>
+</ul></li>
+</ul>
+
+<h3 id="instances">Instances</h3>
+
+<pre><code>instances:
   - name: web
     elastic_ip: true
     type: t2.micro
@@ -633,69 +698,97 @@ Security group ingress rules.
     count: 1
     key_pair: web-key
     security_groups:
-      - web-sg</p>
-
-<pre><code>
-Instances support the following fields:
-
-* **name**
- * String that defines the name of the instance to build.
- * This field is mandatory.
- * This field cannot be null or empty.
- * This field must be unique by user &amp; manifest.
- * The value of this field must be 50 characters maximum.
-
-* **elastic_ip**
- * String that defines if the instance will be assigned an elastic IP.
- * This field is optional.
- * Values can be: “true“ or “false“.
- * This field will default to “false“.
-
-* **type**
- * String that defines the instance size.
- * This field is mandatory.
- * This field cannot be null or empty.
- * This field must be a valid AWS EC2 size.
-
-* **image**
- * String that defines the name of an AMI to install.
- * This field is mandatory.
- * This field cannot be null or empty.
-
-* **network:**
- * String that defines the name of a network to attach this instance.
- * This field is mandatory.
- * This field cannot be null or empty.
- * The value of this field should exist on the networks section previously specified.
-
-* **start_ip:**
- * String that defines the starting IP to allocate the VMs to be built.
- * This field is mandatory.
- * This field cannot be null or empty.
- * This field must be a valid IP.
- * This IP should belong to the network already defined on the instance.
-
-* **count**
- * Integer that defines the number of instances to be created.
- * This field is mandatory.
- * This field cannot be null or empty.
- * This field must be greater or equal that 1
-
-* **key_pair**
- * String that specifies the key pair to be used to login to the instances.
- * This field is optional.
- * This field cannot be null or empty.
-
-* **security_groups**
- * Array that contains security groups that will be applied to the instances.
- * This field is optional.
- * This field can be empty.
-
-### Load Balancers
+      - web-sg
 
 </code></pre>
 
-<p>loadbalancers:
+<p>Instances support the following fields:</p>
+
+<ul>
+<li><p><strong>name</strong></p>
+
+<ul>
+<li>String that defines the name of the instance to build.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+<li>This field must be unique by user &amp; manifest.</li>
+<li>The value of this field must be 50 characters maximum.</li>
+</ul></li>
+
+<li><p><strong>elastic_ip</strong></p>
+
+<ul>
+<li>String that defines if the instance will be assigned an elastic IP.</li>
+<li>This field is optional.</li>
+<li>Values can be: “true“ or “false“.</li>
+<li>This field will default to “false“.</li>
+</ul></li>
+
+<li><p><strong>type</strong></p>
+
+<ul>
+<li>String that defines the instance size.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+<li>This field must be a valid AWS EC2 size.</li>
+</ul></li>
+
+<li><p><strong>image</strong></p>
+
+<ul>
+<li>String that defines the name of an AMI to install.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+</ul></li>
+
+<li><p><strong>network:</strong></p>
+
+<ul>
+<li>String that defines the name of a network to attach this instance.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+<li>The value of this field should exist on the networks section previously specified.</li>
+</ul></li>
+
+<li><p><strong>start_ip:</strong></p>
+
+<ul>
+<li>String that defines the starting IP to allocate the VMs to be built.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+<li>This field must be a valid IP.</li>
+<li>This IP should belong to the network already defined on the instance.</li>
+</ul></li>
+
+<li><p><strong>count</strong></p>
+
+<ul>
+<li>Integer that defines the number of instances to be created.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+<li>This field must be greater or equal that 1</li>
+</ul></li>
+
+<li><p><strong>key_pair</strong></p>
+
+<ul>
+<li>String that specifies the key pair to be used to login to the instances.</li>
+<li>This field is optional.</li>
+<li>This field cannot be null or empty.</li>
+</ul></li>
+
+<li><p><strong>security_groups</strong></p>
+
+<ul>
+<li>Array that contains security groups that will be applied to the instances.</li>
+<li>This field is optional.</li>
+<li>This field can be empty.</li>
+</ul></li>
+</ul>
+
+<h3 id="load-balancers">Load Balancers</h3>
+
+<pre><code>loadbalancers:
   - name: elb-1
     private: false
     subnets:
@@ -711,72 +804,105 @@ Instances support the following fields:
         protocol: https
         ssl_cert: ssl-cert-id
     security_groups:
-      - web-sg</p>
-
-<pre><code>Loadbalancers support the following fields:
-
-* **name**
- * String that defines the name of the instance to build.
- * This field is mandatory.
- * This field cannot be null or empty.
- * This field must be unique by user &amp;amp; manifest.
- * The value of this field must be 50 characters maximum.
-
-* **private**
- * Boolean that defines if the loadbalancer will be private or public.
- * This field is optional.
- * Values can be: “true“ or “false“.
- * This field will default to “false“.
-
- * **subnets**
-  * Array of String's that defines which public subnet to attach to the ELB.
-  * This field is mandatory if private is set to false.
-  * This field cannot be null or empty.
-  * This field must specify a network/subnet that exists on the yaml.
-  * Only one subnet can be deployed per availablilty zone. It is advised that you specify an AZ when defining a network/subnet.
-
-* **instances**
- * Array of String's that defines which group of instances to add to the ELB.
- * This field is mandatory.
- * This field cannot be null or empty.
- * This field must specify an instance group that exists on the yaml.
-
-* **security_groups**
- * Array of String's that defines which security groups to apply to the ELB.
- * This field not is mandatory.
- * This field must specify a security group that exists on the yaml.
-
-**listeners**
-
-ELB Listeners.
-
-* **protocol**
- * String that defines the protocol for this rule.
- * This field is mandatory.
- * This field cannot be null or empty.
- * Values can be: http | https | ssl | tcp
- * If https or ssl is specified, an ssl_cert must be specified.
-
-* **from_port**
- * Starting port-range number.
- * This field is mandatory.
- * Values can be: 1 - 65535.
-
-* **to_port**
- * Ending port-range number.
- * This field is mandatory.
- * Values can be: 1 - 65535.
-
-* **ssl_cert**
- * The ssl certificate ID of a valid AWS Certificate Manager (ACM) cert.
- * This field is mandatory only if protocol is set to https or ssl.
-
-
-### S3 Buckets
+      - web-sg
 
 </code></pre>
 
-<p>s3_buckets:
+<p>Loadbalancers support the following fields:</p>
+
+<ul>
+<li><p><strong>name</strong></p>
+
+<ul>
+<li>String that defines the name of the instance to build.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+<li>This field must be unique by user &amp; manifest.</li>
+<li>The value of this field must be 50 characters maximum.</li>
+</ul></li>
+
+<li><p><strong>private</strong></p>
+
+<ul>
+<li>Boolean that defines if the loadbalancer will be private or public.</li>
+<li>This field is optional.</li>
+<li>Values can be: “true“ or “false“.</li>
+
+<li><p>This field will default to “false“.</p></li>
+
+<li><p><strong>networks</strong></p></li>
+
+<li><p>Array of String&rsquo;s that defines which public network/subnet to attach to the ELB.</p></li>
+
+<li><p>This field is mandatory if private is set to false.</p></li>
+
+<li><p>This field cannot be null or empty.</p></li>
+
+<li><p>This field must specify a network/subnet that exists on the yaml.</p></li>
+
+<li><p>Only one subnet can be deployed per availablilty zone. It is advised that you specify an AZ when defining a network/subnet.</p></li>
+</ul></li>
+
+<li><p><strong>instances</strong></p>
+
+<ul>
+<li>Array of String&rsquo;s that defines which group of instances to add to the ELB.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+<li>This field must specify an instance group that exists on the yaml.</li>
+</ul></li>
+
+<li><p><strong>security_groups</strong></p>
+
+<ul>
+<li>Array of String&rsquo;s that defines which security groups to apply to the ELB.</li>
+<li>This field not is mandatory.</li>
+<li>This field must specify a security group that exists on the yaml.</li>
+</ul></li>
+</ul>
+
+<p><strong>listeners</strong></p>
+
+<p>ELB Listeners.</p>
+
+<ul>
+<li><p><strong>protocol</strong></p>
+
+<ul>
+<li>String that defines the protocol for this rule.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+<li>Values can be: http | https | ssl | tcp</li>
+<li>If https or ssl is specified, an ssl_cert must be specified.</li>
+</ul></li>
+
+<li><p><strong>from_port</strong></p>
+
+<ul>
+<li>Starting port-range number.</li>
+<li>This field is mandatory.</li>
+<li>Values can be: 1 - 65535.</li>
+</ul></li>
+
+<li><p><strong>to_port</strong></p>
+
+<ul>
+<li>Ending port-range number.</li>
+<li>This field is mandatory.</li>
+<li>Values can be: 1 - 65535.</li>
+</ul></li>
+
+<li><p><strong>ssl_cert</strong></p>
+
+<ul>
+<li>The ssl certificate ID of a valid AWS Certificate Manager (ACM) cert.</li>
+<li>This field is mandatory only if protocol is set to https or ssl.</li>
+</ul></li>
+</ul>
+
+<h3 id="s3-buckets">S3 Buckets</h3>
+
+<pre><code>s3_buckets:
   - name: bucket-1
     acl: private
     bucket_location: eu-west-1
@@ -784,7 +910,7 @@ ELB Listeners.
       - id: foo
         type: emailaddress, id, uri
         permissions: full, read, read-acl, write-acl
-```</p>
+</code></pre>
 
 <p>S3 support the following fields:</p>
 

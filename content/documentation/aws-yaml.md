@@ -118,9 +118,6 @@ s3_buckets:
         permissions: full, read, read-acl, write-acl
 ```
 
-
-```
-
 ## Field Reference
 
 ### Service Options
