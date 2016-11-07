@@ -51,7 +51,7 @@
     },
     "datePublished": "2016-06-06",
     "description": "",
-    "wordCount":  1354 
+    "wordCount":  1520 
   }
 </script>
 
@@ -384,6 +384,9 @@ instances:
     image: r3/ubuntu-1404
     cpus: 1
     memory: 1GB
+    disks:
+     - 10GB
+    root_disk: 32GB
     count: 1
     networks:
       name: web
@@ -392,6 +395,12 @@ instances:
       - exec:
         - 'sudo apt-get update'
         - 'sudo apt-get install apache2 -y'
+      - shell:
+        - #!/bin/sh
+        - if [ x$1 == x&quot;postcustomization&quot; ]; then
+        - yum -y install httpd
+        - service httpd start
+        - fi 
 </code></pre>
 
 <h2 id="field-reference">Field Reference</h2>
@@ -636,6 +645,9 @@ ernest_ip:
     image: r3/ubuntu-1404
     cpus: 1
     memory: 1GB
+    disks:
+     - 10GB
+    root_disk: 32GB
     count: 1
     networks:
       name: web
@@ -644,6 +656,12 @@ ernest_ip:
       - exec:
         - 'sudo apt-get update'
         - 'sudo apt-get install apache2 -y'
+      - shell:
+        - #!/bin/sh
+        - if [ x$1 == x&quot;postcustomization&quot; ]; then
+        - yum -y install httpd
+        - service httpd start
+        - fi 
 </code></pre>
 
 <p>Instances support the following fields:</p>
@@ -698,6 +716,17 @@ ernest_ip:
 <li>The possible binary prefixes are MB, GB, TB, PB, YB</li>
 </ul></li>
 
+<li><p><strong>root_disk</strong></p>
+
+<ul>
+<li>String that defines the root disk size of the template the instance is based on.</li>
+<li>This field is optional.</li>
+<li>This field cannot be null or empty.</li>
+<li>The value must be larger than the default root disk size of the template.</li>
+<li>Each element of the string must follow the Binary Prefix format: <a href="https://en.wikipedia.org/wiki/Binary_prefix#Hard_disk_drives" target="_blank">https://en.wikipedia.org/wiki/Binary_prefix#Hard_disk_drives</a></li>
+<li>The possible binary prefixes are MB, GB, TB, PB, YB</li>
+</ul></li>
+
 <li><p><strong>count</strong></p>
 
 <ul>
@@ -730,16 +759,13 @@ Networks is a map with two fields</p>
 <li>This field must be a valid IP.</li>
 <li>This IP should belong to the network already defined on the instance.</li>
 </ul></li>
+</ul>
 
-<li><p><strong>provisioner</strong></p>
+<p><strong>provisioner</strong></p>
+
+<p>Provisioner defines the available provisioner mechanisms.</p>
 
 <ul>
-<li>Array that contains provisioner types</li>
-<li>Each provisioner type will be run in the order they are specified in the document</li>
-<li>This field is optional</li>
-<li>This field can be empty</li>
-</ul></li>
-
 <li><p><strong>exec</strong></p>
 
 <ul>
@@ -747,6 +773,17 @@ Networks is a map with two fields</p>
 <li>Each command in the exec array is concatenated together and delimited by a semicolon.</li>
 <li>This field is optional</li>
 <li>If specified as a provisioner type, this array field must contain at least one element</li>
+<li>The specified commands will be executed by the SALT master.</li>
+</ul></li>
+
+<li><p><strong>shell</strong></p>
+
+<ul>
+<li>Array of strings, any command characters must be escaped with backslashes: (RFC7159, Section 7)</li>
+<li>Each command in the exec array is concatenated together and delimited by a semicolon.</li>
+<li>This field is optional</li>
+<li>If specified as a provisioner type, this array field must contain at least one element</li>
+<li>The specified commands will be executed by the vCloud guest customization script.</li>
 </ul></li>
 </ul>
 

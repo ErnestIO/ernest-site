@@ -51,7 +51,7 @@
     },
     "datePublished": "2016-06-06",
     "description": "",
-    "wordCount":  1151 
+    "wordCount":  1441 
   }
 </script>
 
@@ -356,7 +356,7 @@ DESCRIPTION:
    ernest info - Display system-wide information.
 
 USAGE:
-   ernest info
+   ernest info  
 
 DESCRIPTION:
    Displays ernest instance information.
@@ -371,7 +371,7 @@ DESCRIPTION:
    ernest login - Login with your Ernest credentials.
 
 USAGE:
-   ernest login [command options]
+   ernest login [command options]  
 
 DESCRIPTION:
    Logs an user into Ernest instance.
@@ -396,7 +396,7 @@ OPTIONS:
    ernest logout - Clear local authentication credentials.
 
 USAGE:
-   ernest logout
+   ernest logout  
 
 DESCRIPTION:
    Logs out an user from Ernest instance.
@@ -411,7 +411,7 @@ DESCRIPTION:
    ernest user list - List available users.
 
 USAGE:
-   ernest user list
+   ernest user list  
 
 DESCRIPTION:
    List available users.
@@ -461,7 +461,7 @@ DESCRIPTION:
     or changing a change-password by being admin:
 
     $ ernest user change-password --user &lt;username&gt; --current-password &lt;current-password&gt; --password &lt;new-password&gt;
-
+  
 
 OPTIONS:
    --user value              The username of the user to change password
@@ -490,7 +490,7 @@ DESCRIPTION:
    ernest group delete - Deletes a group.
 
 USAGE:
-   ernest group delete
+   ernest group delete  
 
 DESCRIPTION:
    Deletes a group by name
@@ -499,13 +499,28 @@ DESCRIPTION:
       $ ernest group delete &lt;name&gt;
 </code></pre>
 
+<p><code>ernest group list</code></p>
+
+<pre><code>NAME:
+   ernest group list - List available groups.
+
+USAGE:
+   ernest group list  
+
+DESCRIPTION:
+   List available groups.
+
+   Example:
+    $ ernest group list
+</code></pre>
+
 <p><code>ernest group create</code></p>
 
 <pre><code>NAME:
    ernest group create - Create a group.
 
 USAGE:
-   ernest group create
+   ernest group create  
 
 DESCRIPTION:
    Create a group.
@@ -520,7 +535,7 @@ DESCRIPTION:
    ernest group add-user - Adds a user to a group.
 
 USAGE:
-   ernest group add-user
+   ernest group add-user  
 
 DESCRIPTION:
    Adds a user to a group.
@@ -535,7 +550,7 @@ DESCRIPTION:
    ernest group remove-user - Removes an user from a group.
 
 USAGE:
-   ernest group remove-user
+   ernest group remove-user  
 
 DESCRIPTION:
    Removes an user from a group.
@@ -550,7 +565,7 @@ DESCRIPTION:
    ernest group add-datacenter - Adds a datacenter to a group.
 
 USAGE:
-   ernest group add-datacenter
+   ernest group add-datacenter  
 
 DESCRIPTION:
    Adds a datacenter to a group.
@@ -565,7 +580,7 @@ DESCRIPTION:
    ernest group remove-datacenter - Removes a datacenter from a group.
 
 USAGE:
-   ernest group remove-datacenter
+   ernest group remove-datacenter  
 
 DESCRIPTION:
    Removes an datacenter from a group.
@@ -580,45 +595,13 @@ DESCRIPTION:
    ernest datacenter list - List available datacenters.
 
 USAGE:
-   ernest datacenter list
+   ernest datacenter list  
 
 DESCRIPTION:
    List available datacenters.
 
    Example:
     $ ernest datacenter list
-</code></pre>
-
-<p><code>ernest datacenter create aws</code></p>
-
-<pre><code>NAME:
-   ernest datacenter create aws - Create a new aws datacenter.
-
-USAGE:
-   ernest datacenter create aws [command options] &lt;datacenter-name&gt;
-
-DESCRIPTION:
-   Create a new AWS datacenter on the targeted instance of Ernest.
-
-  Example:
-   $ ernest datacenter create aws --region region --token token --secret secret my_datacenter
-
-   Template example:
-    $ ernest datacenter create aws --template mydatacenter.yml mydatacenter
-    Where mydatacenter.yaml will look like:
-      ---
-      fake: true
-      token: token
-      secret: secret
-      region: region
-
-
-OPTIONS:
-   --region value    Datacenter region
-   --token value     AWS Token
-   --secret value    AWS Secret
-   --template value  Datacenter template
-   --fake            Fake datacenter
 </code></pre>
 
 <p><code>ernest datacenter create vcloud</code></p>
@@ -647,7 +630,7 @@ DESCRIPTION:
       vcloud-url: &quot;http://ss.com&quot;
       vse-url: &quot;http://ss.com&quot;
 
-
+  
 
 OPTIONS:
    --user value            Your VCloud valid user name
@@ -660,13 +643,101 @@ OPTIONS:
    --fake                  Fake datacenter
 </code></pre>
 
+<p><code>ernest datacenter create aws</code></p>
+
+<pre><code>NAME:
+   ernest datacenter create aws - Create a new aws datacenter.
+
+USAGE:
+   ernest datacenter create aws [command options] &lt;datacenter-name&gt;
+
+DESCRIPTION:
+   Create a new AWS datacenter on the targeted instance of Ernest.
+
+  Example:
+   $ ernest datacenter create aws --region region --token token --secret secret my_datacenter
+
+   Template example:
+    $ ernest datacenter create aws --template mydatacenter.yml mydatacenter
+    Where mydatacenter.yaml will look like:
+      ---
+      fake: true
+      token: token
+      secret: secret
+      region: region
+   
+
+OPTIONS:
+   --region value    Datacenter region
+   --token value     AWS Token
+   --secret value    AWS Secret
+   --template value  Datacenter template
+   --fake            Fake datacenter
+</code></pre>
+
+<p><code>ernest datacenter update vcloud</code></p>
+
+<pre><code>NAME:
+   ernest datacenter update vcloud - Updates the specified VCloud datacenter.
+
+USAGE:
+   ernest datacenter update vcloud [command options] &lt;datacenter-name&gt;
+
+DESCRIPTION:
+   Updates the specified VCloud datacenter.
+
+   Example:
+    $ ernest datacenter update vcloud --user &lt;me&gt; --org &lt;org&gt; --password &lt;secret&gt; my_datacenter
+  
+
+OPTIONS:
+   --user value      Your VCloud valid user name
+   --password value  Your VCloud valid password
+   --org value       Your vCloud Organization
+</code></pre>
+
+<p><code>ernest datacenter update aws</code></p>
+
+<pre><code>NAME:
+   ernest datacenter update aws - Updates the specified AWS datacenter.
+
+USAGE:
+   ernest datacenter update aws [command options] &lt;datacenter-name&gt;
+
+DESCRIPTION:
+   Updates the specified AWS datacenter.
+
+   Example:
+    $ ernest datacenter update aws --token &lt;my_token&gt; --secret &lt;mysecret&gt; my_datacenter
+  
+
+OPTIONS:
+   --token value   Your AWS valid token
+   --secret value  Your AWS valid secret
+</code></pre>
+
+<p><code>ernest datacenter delete</code></p>
+
+<pre><code>NAME:
+   ernest datacenter delete - Deletes the specified datacenter.
+
+USAGE:
+   ernest datacenter delete &lt;datacenter-name&gt;
+
+DESCRIPTION:
+   Deletes the name specified datacenter.
+
+   Example:
+    $ ernest datacenter delete my_datacenter
+</code></pre>
+
 <p><code>ernest service list</code></p>
 
 <pre><code>NAME:
    ernest service list - List available services.
 
 USAGE:
-   ernest service list
+   ernest service list  
 
 DESCRIPTION:
    List available services and shows its most relevant information.
@@ -709,7 +780,7 @@ DESCRIPTION:
   
 
 OPTIONS:
-   --yes, -y  Force destroy command without asking for permission.
+   --force, -f  Force destroy command without asking for permission.
 </code></pre>
 
 <p><code>ernest service history</code></p>
@@ -785,22 +856,72 @@ OPTIONS:
 <p><code>ernest service monitor</code></p>
 
 <pre><code>NAME:
-   ernest service info - $ ernest service info &lt;my_service&gt; --build &lt;specific build&gt;
+   ernest service monitor - Monitor a service.
 
 USAGE:
-   ernest service info [command options] &lt;service_name&gt;
+   ernest service monitor &lt;service_name&gt;
 
 DESCRIPTION:
-   Will show detailed information of the last build of a specified service.
-  In case you specify --build option you will be able to output the detailed information of specific build of a service.
+   Monitors a service while it is being built by its service name.
 
-   Examples:
-    $ ernest service definition myservice
-    $ ernest service definition myservice --build build1
+   Example:
+    $ ernest monitor my_service
+</code></pre>
 
+<p><code>ernest preferences logger list</code></p>
+
+<pre><code>NAME:
+   ernest preferences logger list - Lists active loggers.
+
+USAGE:
+   ernest preferences logger list  
+
+DESCRIPTION:
+   List active loggers.
+
+   Example:
+    $ ernest preferences logger list
+</code></pre>
+
+<p><code>ernest preferences logger add</code></p>
+
+<pre><code>NAME:
+   ernest preferences logger add - Creates / updates a logger based on its type.
+
+USAGE:
+   ernest preferences logger add [command options]  
+
+DESCRIPTION:
+   Creates / updates a logger based on its types.
+
+   Example:
+    $ ernest preferences logger add basic --logfile /tmp/ernest.log
+    $ ernest preferences logger add logstash --hostname 10.50.1.1 --port 5000 --timeout 50000
+    $ ernest preferences logger add rollbar --token MY_ROLLBAR_TOKEN
+  
 
 OPTIONS:
-   --build value  Build ID
+   --logfile value   Specify the path for the loging file
+   --token value     Rollbar token
+   --env value       Rollbar environment
+   --hostname value  Logstash hostname
+   --port value      Logstash port (default: 0)
+   --timeout value   Logstash timeout (default: 0)
+</code></pre>
+
+<p><code>ernest preferences logger delete</code></p>
+
+<pre><code>NAME:
+   ernest preferences logger delete - Deletes a logger based on its type.
+
+USAGE:
+   ernest preferences logger delete  
+
+DESCRIPTION:
+   Deletes a logger based on its types.
+
+   Example:
+    $ ernest preferences logger delete basic
 </code></pre>
 
     </div>
