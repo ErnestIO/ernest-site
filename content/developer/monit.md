@@ -16,3 +16,4 @@ This service is sending real time information about service creation to the end 
 
 It is catching all internal messages and decides which ones will fire a new message through the stream
 
+It exposes data streams through SSE(Server Side Events).

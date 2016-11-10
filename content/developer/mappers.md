@@ -27,5 +27,3 @@ Validates and maps the VCloud yaml input on a valid internal service.
 #### aws-definition-mapper
 
 Validates and maps the AWS yaml input on a valid internal service.
-
-

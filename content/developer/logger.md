@@ -12,5 +12,4 @@ showChildren=true
 
 # Logger
 
-Logger is listening at all events inside ofuscating sesnible data and sending it to a third party logger system.
-
+Logger is listening at all events on the message bus and ofuscating sensible data and sending it to a third party logger system.

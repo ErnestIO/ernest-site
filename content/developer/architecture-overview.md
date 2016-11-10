@@ -12,12 +12,12 @@ showChildren=true
 
 # Architecture overview
 
-Ernest is based on a microservice oriented architecture, even a big part of them are built on top of Go, we're still need to maintain some jruby based in order to interact with VCloud.
+Ernest is based on a microservice oriented architecture. The majority of the services are built using Go, however we still need to maintain some jruby based in order to interact with VCloud.
 
 
 ## Service Structure
 
-These microservices can be categorized on different families:
+These microservices can be categorized into different families:
 
 ### Public
 This family holds every service with a public or private interface intended to be used by the end user.
@@ -61,4 +61,3 @@ Additionally we use to group these families on
 
 - Frontend (Public + Stores)
 - Backend (Mappers + Core + Builders + Adapters + Connectors)
-

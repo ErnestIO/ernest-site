@@ -16,16 +16,16 @@ In order to keep it clean there are some naming conventions you need to follow i
 
 ## Service Naming
 
-Every service family is following an easy to understand naming conventions.
+Every service family follows an easy to understand naming convention.
 
 ### Mappers
 
-Mappers will be named following the structure *<provider>-definition-mapper* where provider is the cloud service it will be mapping AWS, VCloud ...
+Mappers will be named following the structure *<provider>-definition-mapper*. 'provider' is the cloud service it will be mapping, i.e. AWS, VCloud ...
 
 
 ### Adapters
 
-We base the adapters naming on the component they're representing *<component>-adapter*. A component can be an instance, a network, a s3 bucket...
+We base the adapters naming on the component they're representing *<component>-adapter*. A component can be an instance, a network, an s3 bucket...
 
 ### Connectors
 
@@ -38,17 +38,17 @@ It is basically composed by some variable parts:
 
 ## Messages naming
 
-All services on ernest are comunicating through nats messages, there is a naming conventions for any message on the platform, and you can find it in diferent forms:
+All services on ernest are communicating through nats messages. There is a naming convention for any message on the platform, and you can find it in diferent forms:
 
-#### <component>s.<action>
+#### \<component\>s.\<action\>
 
-These messages are representing the comunication between the workflow manager and the builders, and basically they're managing a list of components to be processed.
+These messages are representing the communication between the workflow manager and the builders, and basically they're managing a list of components to be processed.
 
-#### <component>.<action>
+#### \<component\>.\<action\>
 
-A single component to be processed, these messages are managed by builders and adapters.
+A single component to be processed; these messages are managed by builders and adapters.
 
-#### <component>.<action>.<provider>
+#### \<component\>.\<action\>.\<provider\>
 
 They are sending the necessary info from the adapter to be processed by a specific connnector.
 

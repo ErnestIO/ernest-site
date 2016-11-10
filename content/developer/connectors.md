@@ -13,5 +13,3 @@ showChildren=true
 ### Connectors
 
 A connector is a service which is directly interacting with the provider in order to process (get, create, update or delete) the component on the provider.
-
-
