@@ -367,3 +367,9 @@ iframe {
 }
 #Email.fieldInvalid {
   border: 1px solid #ff0000;
+}
+
+div.markdown-container {
+  margin: 20px 0 50px 0;
+}
+
