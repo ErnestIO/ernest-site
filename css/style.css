@@ -275,6 +275,10 @@ footer .social img {
   text-align: center;
 }
 
+.separator {
+  height: 1px;
+}
+
 .promo-info {
   text-align: left;
 }
