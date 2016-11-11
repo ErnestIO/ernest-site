@@ -116,6 +116,27 @@ s3_buckets:
       - id: foo
         type: emailaddress, id, uri
         permissions: full, read, read-acl, write-acl
+
+route53_zones:
+  - name: example.com
+    private: false
+    records:
+      - entry: one.example.com
+        type: A
+        ttl: 3600
+        instances:
+          - web-1
+      - entry: two.example.com
+        type: CNAME
+        ttl: 3600
+        loadbalancers:
+          - elb-1
+      - entry: three.example.com
+        type: MX
+        ttl: 3600
+        values:
+          - 8.8.8.8
+          - 8.8.4.4
 ```
 
 ## Field Reference
@@ -497,3 +518,62 @@ S3 support the following fields:
 * **permissions**  
  * (string) Permissions for this grantee on the bucket
  * Possible values: full, read, read-acl and write-acl
+
+
+
+ ### Route53 Zones
+
+ ```
+ route53_zones:
+   - name: example.com
+     private: false
+     records:
+       - entry: one.example.com
+         type: A
+         ttl: 3600
+         values:
+           - 8.8.8.8
+ ```
+
+ S3 support the following fields:
+
+ * **name**
+  * (string) The domain name of the zone.
+  * This field is mandatory.
+  * This field cannot be null or empty.
+  * This field must be unique by user &amp; manifest.
+
+ * **private**
+  * (boolean) sets the zone to be private hosted zone.
+  * The value of this field can be true or false. Default is false.
+
+**records**
+
+The collection of DNS entries you want to host.
+
+ * **entry**
+  * (string) the full domain record entry
+  * The value of this field should be an F.Q.D.N (fully qualified domain name)
+
+ * **Type**
+ * (string) the full domain record entry
+ * The value of this field should be one of 'A', 'AAAA', 'CNAME', 'MX', 'PTR', 'TXT', 'SRV', 'SPF', 'NAPTR', 'NS', 'SOA'
+
+ * **TTL**
+ * (int) the expiration period of the entry.
+ * The value of this field should be greater than 0
+
+ * **values**
+  * Array of strings. The values the entry will return
+  * These values must be valid for the type of record you have selected.
+
+ * **Loadbalancers**
+  * Array of strings. The loadbalancers you wish the entry to resolve to.
+  * The type of record must be set to CNAME
+  * You must specify only loadbalancers or instances, not both.
+
+ * **instances**
+  * Array of strings. The loadbalancers you wish the entry to resolve to.
+  * The type of record must be set to A
+  * This must target the individual instance, including the instances number, i.e. web-1
+  * You must specify only loadbalancers or instances, not both.
