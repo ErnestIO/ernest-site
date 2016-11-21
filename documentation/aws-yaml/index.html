@@ -51,7 +51,7 @@
     },
     "datePublished": "2016-06-06",
     "description": "",
-    "wordCount":  1695 
+    "wordCount":  1982 
   }
 </script>
 
@@ -61,6 +61,7 @@
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/img/ernest-dog.ico">
 <link rel="icon" href="/img/ernest-dog.ico">
 <meta name="generator" content="Hugo 0.16-DEV" />
+<link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Raleway" rel="stylesheet">
 
   <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
@@ -80,6 +81,7 @@
 
 
   <script src="https://use.fontawesome.com/2abc4da92a.js"></script>
+  <link href="https://cdn.jsdelivr.net/github-markdown-css/2.4.1/github-markdown.css" type="text/css" rel="stylesheet" media="screen" />
 </head>
 <body class="map[name:ernest]" data-ng-app="myapp" data-ng-controller="MyController" data-ng-mouseleave="MouseLeave($event)">
     
@@ -138,6 +140,15 @@
             </a>
           </li>
           
+        
+          <li class="">          
+            <a href="/developer"
+            >
+            
+            DEVELOPER
+            </a>
+          </li>
+          
         </ul>
       </div>
       
@@ -167,7 +178,7 @@
     
     
     <li class="">
-      <a href="/documentation/">Overview </a>
+      <a href="/developer/">Overview </a>
 
       
    		
@@ -438,6 +449,27 @@ s3_buckets:
       - id: foo
         type: emailaddress, id, uri
         permissions: full, read, read-acl, write-acl
+
+route53_zones:
+  - name: example.com
+    private: false
+    records:
+      - entry: one.example.com
+        type: A
+        ttl: 3600
+        instances:
+          - web-1
+      - entry: two.example.com
+        type: CNAME
+        ttl: 3600
+        loadbalancers:
+          - elb-1
+      - entry: three.example.com
+        type: MX
+        ttl: 3600
+        values:
+          - 8.8.8.8
+          - 8.8.4.4
 </code></pre>
 
 <h2 id="field-reference">Field Reference</h2>
@@ -966,6 +998,88 @@ nat_gateways:
 <ul>
 <li>(string) Permissions for this grantee on the bucket</li>
 <li>Possible values: full, read, read-acl and write-acl</li>
+</ul></li>
+</ul>
+
+<p>### Route53 Zones</p>
+
+<pre><code> route53_zones:
+   - name: example.com
+     private: false
+     records:
+       - entry: one.example.com
+         type: A
+         ttl: 3600
+         values:
+           - 8.8.8.8
+</code></pre>
+
+<p>S3 support the following fields:</p>
+
+<ul>
+<li><p><strong>name</strong></p>
+
+<ul>
+<li>(string) The domain name of the zone.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+<li>This field must be unique by user &amp; manifest.</li>
+</ul></li>
+
+<li><p><strong>private</strong></p>
+
+<ul>
+<li>(boolean) sets the zone to be private hosted zone.</li>
+<li>The value of this field can be true or false. Default is false.</li>
+</ul></li>
+</ul>
+
+<p><strong>records</strong></p>
+
+<p>The collection of DNS entries you want to host.</p>
+
+<ul>
+<li><p><strong>entry</strong></p>
+
+<ul>
+<li>(string) the full domain record entry</li>
+<li>The value of this field should be an F.Q.D.N (fully qualified domain name)</li>
+</ul></li>
+
+<li><p><strong>Type</strong></p></li>
+
+<li><p>(string) the full domain record entry</p></li>
+
+<li><p>The value of this field should be one of &lsquo;A&rsquo;, &lsquo;AAAA&rsquo;, &lsquo;CNAME&rsquo;, &lsquo;MX&rsquo;, &lsquo;PTR&rsquo;, &lsquo;TXT&rsquo;, &lsquo;SRV&rsquo;, &lsquo;SPF&rsquo;, &lsquo;NAPTR&rsquo;, &lsquo;NS&rsquo;, &lsquo;SOA&rsquo;</p></li>
+
+<li><p><strong>TTL</strong></p></li>
+
+<li><p>(int) the expiration period of the entry.</p></li>
+
+<li><p>The value of this field should be greater than 0</p></li>
+
+<li><p><strong>values</strong></p>
+
+<ul>
+<li>Array of strings. The values the entry will return</li>
+<li>These values must be valid for the type of record you have selected.</li>
+</ul></li>
+
+<li><p><strong>Loadbalancers</strong></p>
+
+<ul>
+<li>Array of strings. The loadbalancers you wish the entry to resolve to.</li>
+<li>The type of record must be set to CNAME</li>
+<li>You must specify only loadbalancers or instances, not both.</li>
+</ul></li>
+
+<li><p><strong>instances</strong></p>
+
+<ul>
+<li>Array of strings. The loadbalancers you wish the entry to resolve to.</li>
+<li>The type of record must be set to A</li>
+<li>This must target the individual instance, including the instances number, i.e. web-1</li>
+<li>You must specify only loadbalancers or instances, not both.</li>
 </ul></li>
 </ul>
 
