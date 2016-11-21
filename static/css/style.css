@@ -1,5 +1,6 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
 @import url(https://fonts.googleapis.com/css?family=Orbitron:700);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Raleway)
 
 html {
   position: relative;
@@ -8,10 +9,8 @@ html {
 
 body {
   /* Margin bottom by footer height */
-  font-family: 'Open Sans', 'sans-serif';
+  font-family: 'Raleway', 'sans-serif';
   font-size: 16px;
-  margin-bottom: 70px;
-  padding-top: 30px;
 /*  padding-bottom: 30px;*/
   color: #666666;
 }
@@ -23,8 +22,19 @@ body {
   --main-color: #0E80C4;
 }
 
+.jumbotron h1 {
+  text-align: left;
+  font-family: 'Open Sans Condensed', 'sans-serif';
+}
+
 .jumbotron p {
+
   vertical-align: middle;
+  text-align: left;
+}
+.jumbotron .col-md-8 {
+  padding-left: 0px;
+  padding-right: 30px;
 }
 
 .jumbotron a.btn {
@@ -89,7 +99,7 @@ body {
 }
 
 .footer {
-  position: absolute;
+  position: relative;
   bottom: 0;
   //margin-top: 3rem;
   width: 100%;
@@ -100,6 +110,7 @@ body {
   background-color: #222222;
   color: #9D9D9D;
   vertical-align: middle;
+  margin-bottom: 0px;
 } 
 
 .footer-left {
@@ -304,6 +315,12 @@ footer .social img {
     text-transform: uppercase;
 }
 
+.separator {
+  height: 1px;
+  padding: 0px;
+  margin: 0px;
+}
+
 .dark-bg {
   background: #F0F0F0;
 }
@@ -371,5 +388,67 @@ iframe {
 
 div.markdown-container {
   margin: 20px 0 50px 0;
+}
+
+div.feature-grey {
+  background-color: #CCCCD4;
+  color: #000;
+}
+
+div.feature-dark {
+  background-color: #0E80C4;
+  color: #FFF;
+}
+
+div.feature {
+  padding-top: 40px;
+  padding-bottom: 50px;
+}
+
+div.feature h3 {
+  font-size: 18px;
+}
+
+div.feature ul {
+  margin-top: 40px;
+  padding-right: 0px !important;
+  -webkit-padding-start: 0px;
+}
+
+div.feature ul li {
+  margin-top: 35px;
+  list-style-type: none;
+}
+
+div.feature ul li div.feature-section {
+  font-size: 23px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+img.single-file {
+  padding: 25px 0px;
+}
+
+img.centralized {
+  padding: 0px;
+  height: 400px;
+}
+
+div.centered {
+  text-align:center;
+}
+
+div.rack-container {
+  padding-top: 50px;
+  padding-bottom: 30px;
+}
+
+div.rack {
+  min-width: 256px;
+  max-width: 741px;
+  height: 128px;
+  background-image: url("/img/rack.png");
+  background-repeat: repeat-x;
 }
 
