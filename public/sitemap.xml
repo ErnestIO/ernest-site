@@ -3,7 +3,77 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2016-06-06T00:00:00+00:00</lastmod>
+    <lastmod>2016-10-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/developer/api-gateway/</loc>
+    <lastmod>2016-10-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/developer/architecture-overview/</loc>
+    <lastmod>2016-10-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/developer/bdd/</loc>
+    <lastmod>2016-10-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/developer/adapters/</loc>
+    <lastmod>2016-10-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/developer/builders/</loc>
+    <lastmod>2016-10-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/developer/stores/</loc>
+    <lastmod>2016-10-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/developer/mappers/</loc>
+    <lastmod>2016-10-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/developer/integration-testing/</loc>
+    <lastmod>2016-10-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/developer/logger/</loc>
+    <lastmod>2016-10-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/developer/monit/</loc>
+    <lastmod>2016-10-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/developer/naming-conventions/</loc>
+    <lastmod>2016-10-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/developer/unit-testiing/</loc>
+    <lastmod>2016-10-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/developer/connectors/</loc>
+    <lastmod>2016-10-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/developer/workflow-manager/</loc>
+    <lastmod>2016-10-24T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -38,6 +108,11 @@
   
   <url>
     <loc>/documentation/vcloud-intro/</loc>
+    <lastmod>2016-06-06T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/developer/</loc>
     <lastmod>2016-06-06T00:00:00+00:00</lastmod>
   </url>
   

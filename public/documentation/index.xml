@@ -638,6 +638,27 @@ s3_buckets:
       - id: foo
         type: emailaddress, id, uri
         permissions: full, read, read-acl, write-acl
+
+route53_zones:
+  - name: example.com
+    private: false
+    records:
+      - entry: one.example.com
+        type: A
+        ttl: 3600
+        instances:
+          - web-1
+      - entry: two.example.com
+        type: CNAME
+        ttl: 3600
+        loadbalancers:
+          - elb-1
+      - entry: three.example.com
+        type: MX
+        ttl: 3600
+        values:
+          - 8.8.8.8
+          - 8.8.4.4
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;field-reference&#34;&gt;Field Reference&lt;/h2&gt;
@@ -1166,6 +1187,88 @@ nat_gateways:
 &lt;ul&gt;
 &lt;li&gt;(string) Permissions for this grantee on the bucket&lt;/li&gt;
 &lt;li&gt;Possible values: full, read, read-acl and write-acl&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;### Route53 Zones&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; route53_zones:
+   - name: example.com
+     private: false
+     records:
+       - entry: one.example.com
+         type: A
+         ttl: 3600
+         values:
+           - 8.8.8.8
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;S3 support the following fields:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;name&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(string) The domain name of the zone.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;This field must be unique by user &amp;amp; manifest.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;private&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(boolean) sets the zone to be private hosted zone.&lt;/li&gt;
+&lt;li&gt;The value of this field can be true or false. Default is false.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;records&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The collection of DNS entries you want to host.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;entry&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(string) the full domain record entry&lt;/li&gt;
+&lt;li&gt;The value of this field should be an F.Q.D.N (fully qualified domain name)&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Type&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;(string) the full domain record entry&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;The value of this field should be one of &amp;lsquo;A&amp;rsquo;, &amp;lsquo;AAAA&amp;rsquo;, &amp;lsquo;CNAME&amp;rsquo;, &amp;lsquo;MX&amp;rsquo;, &amp;lsquo;PTR&amp;rsquo;, &amp;lsquo;TXT&amp;rsquo;, &amp;lsquo;SRV&amp;rsquo;, &amp;lsquo;SPF&amp;rsquo;, &amp;lsquo;NAPTR&amp;rsquo;, &amp;lsquo;NS&amp;rsquo;, &amp;lsquo;SOA&amp;rsquo;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;TTL&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;(int) the expiration period of the entry.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;The value of this field should be greater than 0&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;values&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Array of strings. The values the entry will return&lt;/li&gt;
+&lt;li&gt;These values must be valid for the type of record you have selected.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Loadbalancers&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Array of strings. The loadbalancers you wish the entry to resolve to.&lt;/li&gt;
+&lt;li&gt;The type of record must be set to CNAME&lt;/li&gt;
+&lt;li&gt;You must specify only loadbalancers or instances, not both.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;instances&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Array of strings. The loadbalancers you wish the entry to resolve to.&lt;/li&gt;
+&lt;li&gt;The type of record must be set to A&lt;/li&gt;
+&lt;li&gt;This must target the individual instance, including the instances number, i.e. web-1&lt;/li&gt;
+&lt;li&gt;You must specify only loadbalancers or instances, not both.&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </description>
