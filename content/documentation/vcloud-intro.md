@@ -4,7 +4,7 @@ title = "Introduction"
 category = "documentation"
 showChildren=true
 [menu.documentation]
-  name = "Introduction"
+  name = "vCloud Introduction"
   weight = -100
   identifier = "vcloud-intro"
   parent = "vCloud Director"

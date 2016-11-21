@@ -4,7 +4,7 @@ title = "Introduction"
 category = "documentation"
 showChildren=true
 [menu.documentation]
-  name = "Introduction"
+  name = "AWS Introduction"
   weight = -100
   identifier = "aws-intro"
   parent = "Amazon Web Services"
@@ -22,6 +22,7 @@ The following AWS services are supported by Ernest:
 * [VPC](https://aws.amazon.com/vpc/)
 * [ELB](https://aws.amazon.com/elasticloadbalancing/)
 * [S3](https://aws.amazon.com/s3/)
+* [Route53](https://aws.amazon.com/route53/)
 
 ## Next Steps
 
