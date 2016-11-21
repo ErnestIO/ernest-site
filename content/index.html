@@ -14,7 +14,7 @@ description = "Ernest makes it easier to develop and deploy applications in the 
       <div class="col-md-8">
         <p>
           Ernest allows you to create, manage and collaborate on your infrastructure, and do it through an easy single config file. 
-          Is an open source layer on top of the most common cloud platform apis, so you can interact with all of them through a simple yaml file.
+          Ernest is an open source layer on top of the most common cloud platform APIs, so you can interact with all of them through a simple yaml file.
         </p> 
       </div>
       <div class="col-md-4">
@@ -209,46 +209,7 @@ description = "Ernest makes it easier to develop and deploy applications in the 
 </pre>
       </div>
 
-      <div class="example">
-        <h3>AWS Basic example</h3>
-        <p>Basic AWS example creating an instance....</p>
-<pre style="background:#000;color:#f8f8f8"><span style="color:#65b042">---</span>
-<span style="color:#65b042"><span style="color:#89bdff">name:</span> <span style="color:#65b042">demo</span></span>
-<span style="color:#65b042"><span style="color:#89bdff">datacenter:</span> <span style="color:#65b042">my-dc</span></span>
-<span style="color:#65b042"><span style="color:#89bdff">vpc_id:</span> <span style="color:#65b042">vpc-abcdef01</span></span>
 
-<span style="color:#89bdff"><span style="color:#89bdff">networks</span>:</span>
-  <span style="color:#65b042">- name: <span style="color:#65b042">public</span></span>
-    <span style="color:#65b042"><span style="color:#89bdff">subnet:</span> <span style="color:#65b042">10.0.10.0/24</span></span>
-    <span style="color:#65b042"><span style="color:#89bdff">public:</span> <span style="color:#65b042">true</span></span>
-
-<span style="color:#89bdff"><span style="color:#89bdff">security_groups</span>:</span>
-  <span style="color:#65b042">- name: <span style="color:#65b042">public-sg</span></span>
-    <span style="color:#89bdff"><span style="color:#89bdff">egress</span>:</span>
-      <span style="color:#65b042">- ip: <span style="color:#65b042">0.0.0.0/0</span></span>
-        <span style="color:#65b042"><span style="color:#89bdff">protocol:</span> <span style="color:#65b042">any</span></span>
-        <span style="color:#65b042"><span style="color:#89bdff">from_port:</span> <span style="color:#65b042">'0'</span></span>
-        <span style="color:#65b042"><span style="color:#89bdff">to_port:</span> <span style="color:#65b042">'65535'</span></span>
-    <span style="color:#89bdff"><span style="color:#89bdff">ingress</span>:</span>
-      <span style="color:#65b042">- ip: <span style="color:#65b042">52.211.19.211/32</span></span>
-        <span style="color:#65b042"><span style="color:#89bdff">protocol:</span> <span style="color:#65b042">tcp</span></span>
-        <span style="color:#65b042"><span style="color:#89bdff">from_port:</span> <span style="color:#65b042">'22'</span></span>
-        <span style="color:#65b042"><span style="color:#89bdff">to_port:</span> <span style="color:#65b042">'22'</span></span>
-
-<span style="color:#89bdff"><span style="color:#89bdff">instances</span>:</span>
-  <span style="color:#65b042">- name: <span style="color:#65b042">public</span></span>
-    <span style="color:#65b042"><span style="color:#89bdff">elastic_ip:</span> <span style="color:#65b042">true</span></span>
-    <span style="color:#65b042"><span style="color:#89bdff">type:</span> <span style="color:#65b042">t2.micro</span></span>
-    <span style="color:#65b042"><span style="color:#89bdff">image:</span> <span style="color:#65b042">ami-ed82e39e</span></span>
-    <span style="color:#65b042"><span style="color:#89bdff">network:</span> <span style="color:#65b042">public</span></span>
-    <span style="color:#65b042"><span style="color:#89bdff">start_ip:</span> <span style="color:#65b042">10.0.10.11</span></span>
-    <span style="color:#3387cc"><span style="color:#89bdff">count:</span> 1</span>
-    <span style="color:#65b042"><span style="color:#89bdff">key_pair:</span> <span style="color:#65b042">my-key</span></span>
-    <span style="color:#89bdff"><span style="color:#89bdff">security_groups</span>:</span>
-      <span style="color:#65b042">- <span style="color:#65b042">public-sg</span></span>
-<span style="color:#fd5ff1;">        </span>
-</pre>
-      </div>
     </div>
   </div>
 </div>
