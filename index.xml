@@ -540,7 +540,7 @@ Welcome back user1
 
 &lt;p&gt;Once we have logged in to Ernest we can setup the AWS datacenter and credentials that Ernest will use to create our infrastructure:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;$ ernest datacenter create aws --region eu-west-1 --token XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --secret YYYYYYYYYYYYYYYYYYYY my-dc
+&lt;pre&gt;&lt;code&gt;$ ernest datacenter create aws --region eu-west-1 --secret_access_key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --access_key_id YYYYYYYYYYYYYYYYYYYY my-dc
 Datacenter &#39;my-dc&#39; successfully created
 
 &lt;/code&gt;&lt;/pre&gt;
