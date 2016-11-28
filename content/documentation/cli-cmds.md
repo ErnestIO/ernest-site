@@ -333,22 +333,22 @@ DESCRIPTION:
    Create a new AWS datacenter on the targeted instance of Ernest.
 
   Example:
-   $ ernest datacenter create aws --region region --token token --secret secret my_datacenter
+   $ ernest datacenter create aws --region region --secret_access_key secret_access_key --access_key_id access_key_id my_datacenter
 
    Template example:
     $ ernest datacenter create aws --template mydatacenter.yml mydatacenter
     Where mydatacenter.yaml will look like:
       ---
       fake: true
-      token: token
-      secret: secret
+      secret_access_key: secret_access_key
+      access_key_id: access_key_id
       region: region
    
 
 OPTIONS:
    --region value    Datacenter region
-   --token value     AWS Token
-   --secret value    AWS Secret
+   --secret_access_key value     AWS secret_access_key
+   --access_key_id value    AWS access_key_id
    --template value  Datacenter template
    --fake            Fake datacenter
 ```
@@ -386,12 +386,12 @@ DESCRIPTION:
    Updates the specified AWS datacenter.
 
    Example:
-    $ ernest datacenter update aws --token <my_token> --secret <mysecret> my_datacenter
+    $ ernest datacenter update aws --secret_access_key <secret_access_key> --access_key_id <access_key_id> my_datacenter
   
 
 OPTIONS:
-   --token value   Your AWS valid token
-   --secret value  Your AWS valid secret
+   --secret_access_key value   Your AWS valid secret_access_key 
+   --access_key_id value  Your AWS valid access_key_id
 ```
 
 `ernest datacenter delete`
@@ -575,12 +575,12 @@ DESCRIPTION:
    Example:
     $ ernest preferences logger add basic --logfile /tmp/ernest.log
     $ ernest preferences logger add logstash --hostname 10.50.1.1 --port 5000 --timeout 50000
-    $ ernest preferences logger add rollbar --token MY_ROLLBAR_TOKEN
+    $ ernest preferences logger add rollbar --secret_access_key MY_ROLLBAR_TOKEN
   
 
 OPTIONS:
    --logfile value   Specify the path for the loging file
-   --token value     Rollbar token
+   --secret_access_key value     Rollbar token
    --env value       Rollbar environment
    --hostname value  Logstash hostname
    --port value      Logstash port (default: 0)

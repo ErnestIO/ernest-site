@@ -85,7 +85,7 @@ Current user : <user>
 Ernest uses the concept of a **datacenter** to specify an infrastructure service provider, the provider API endpoint, credentials to access the provider API, and information specific to certain provider types. An example of creating a datacenter in Ernest for Amazon Web Services is:
 
 ```
-$ ernest datacenter create aws --region region --token token --secret secret <dc name>
+$ ernest datacenter create aws --region region --secret_access_key secret_access_key --access_key_id access_key_id <dc name>
 
 ```
 

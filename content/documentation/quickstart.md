@@ -74,7 +74,7 @@ Welcome back user1
 Configure the datacenter on Ernest using your Access Key, Secret Key, and VPC ID:
 
 ```
-$ ernest datacenter create aws --region eu-west-1 --token XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --secret YYYYYYYYYYYYYYYYYYYY my-dc
+$ ernest datacenter create aws --region eu-west-1 --secret_access_key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --access_key_id YYYYYYYYYYYYYYYYYYYY my-dc
 Datacenter 'my-dc' successfully created 
 
 ```
