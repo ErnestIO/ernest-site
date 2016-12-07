@@ -51,7 +51,7 @@
     },
     "datePublished": "2016-06-06",
     "description": "",
-    "wordCount":  1982 
+    "wordCount":  3272 
   }
 </script>
 
@@ -364,6 +364,10 @@ networks:
     subnet: 10.0.11.0/24
     public: false
     nat_gateway: db-nat
+  - name: db-standby
+    subnet: 10.0.12.0/24
+    public: false
+    nat_gateway: db-nat
 
 nat_gateways:
   - name: db-nat
@@ -470,6 +474,29 @@ route53_zones:
         values:
           - 8.8.8.8
           - 8.8.4.4
+      - entry: db.example.com
+        type: CNAME
+        ttl: 3600
+        rds_clusters:
+          - rds-aurora
+
+rds_clusters:
+  - name: rds-aurora
+    engine: aurora
+    port: 3306
+    networks:
+      - db
+      - db-standby
+    security_groups:
+      - db-sg-1
+    database_name: test
+    database_username: test
+    database_password: testpass-2
+
+rds_instances:
+  - name: rds-test-1
+    cluster: rds-test
+    size: db.r3.xlarge
 </code></pre>
 
 <h2 id="field-reference">Field Reference</h2>
@@ -1080,6 +1107,408 @@ nat_gateways:
 <li>The type of record must be set to A</li>
 <li>This must target the individual instance, including the instances number, i.e. web-1</li>
 <li>You must specify only loadbalancers or instances, not both.</li>
+</ul></li>
+</ul>
+
+<h3 id="rds-clusters">RDS Clusters</h3>
+
+<pre><code>rds_clusters:
+  - name: aurora-test
+    engine: aurora
+    engine_version: 1.9
+    public: false
+    port: 3306
+    availablily_zones:
+      - eu-west-1a
+      - eu-west-1b
+      - eu-west-1c
+    security_groups:
+      - sg-1
+    networks:
+      - db-nw
+    database_name: aurora-test
+    database_username: username
+    database_password: password
+    backups:
+      window: Mon:21:30-Mon:22:00
+      rentention_period: 1
+    maintenance_window: Mon:21:30-Mon:22:00
+    final_snapshot: true
+
+</code></pre>
+
+<p>RDS Clusters support the following fields:</p>
+
+<ul>
+<li><p><strong>name</strong></p>
+
+<ul>
+<li>(string) The name of the rds cluster.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+<li>This field must be unique by user &amp; manifest.</li>
+</ul></li>
+
+<li><p><strong>engine</strong></p>
+
+<ul>
+<li>(string) The engine type of the rds cluster.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+<li>Currently only &lsquo;aurora&rsquo; is supported as a value.</li>
+</ul></li>
+
+<li><p><strong>engine_version</strong></p>
+
+<ul>
+<li>(string) The engine_version of the rds cluster.</li>
+<li>This field is not mandatory.</li>
+</ul></li>
+
+<li><p><strong>port</strong></p>
+
+<ul>
+<li>(int) The port exposed by the rds cluster.</li>
+<li>This field not is mandatory.</li>
+<li>This field must be between 1150 - 65535 (default: 3306).</li>
+</ul></li>
+
+<li><p><strong>public</strong></p>
+
+<ul>
+<li>(boolean) Sets the rds cluster to be publicly accessible.</li>
+<li>This field not is mandatory.</li>
+<li>The value of this field can be true or alse. Default is false.</li>
+</ul></li>
+
+<li><p><strong>availability_zones</strong></p>
+
+<ul>
+<li>Array of strings. The availability zones to deploy the rds cluster to.</li>
+<li>This field not is mandatory.</li>
+<li>The availability zone must be in the same region as the vpc it is deployed to.</li>
+<li>If the rds cluster is set to private, there must be networks specified for each availability zone.</li>
+</ul></li>
+
+<li><p><strong>security_groups</strong></p>
+
+<ul>
+<li>Array of String&rsquo;s that defines which security groups to apply to the rds cluster.</li>
+<li>This field not is mandatory.</li>
+<li>This field must specify a security group that exists on the yaml.</li>
+</ul></li>
+
+<li><p><strong>networks</strong></p>
+
+<ul>
+<li>Array of String&rsquo;s that defines which networks to expose the rds cluster to.</li>
+<li>This field not is mandatory (if public is set to true).</li>
+<li>This field must specify a security group that exists on the yaml.</li>
+</ul></li>
+
+<li><p><strong>database_name</strong></p>
+
+<ul>
+<li>(string) The database name of the rds cluster.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+</ul></li>
+
+<li><p><strong>database_username</strong></p>
+
+<ul>
+<li>(string) The database username of the rds cluster.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+</ul></li>
+
+<li><p><strong>database_username</strong></p>
+
+<ul>
+<li>(string) The database password of the rds cluster.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+</ul></li>
+
+<li><p><strong>maintenance_window</strong></p>
+
+<ul>
+<li>(string) The time period at which any maintenance tasks will occur.</li>
+<li>This field is not mandatory.</li>
+<li>Format must be a range in the structure of DDD:HH::MM-DDD:HH::MM (Day:Hour:Minute)</li>
+</ul></li>
+
+<li><p><strong>replication_source</strong></p>
+
+<ul>
+<li>(string) The target rds cluster or mysql instance to replicate from.</li>
+<li>Must be a valid ARN (Amazon Resource Name).</li>
+<li><a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html" target="_blank">http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html</a></li>
+</ul></li>
+
+<li><p><strong>final_snapshot</strong></p>
+
+<ul>
+<li>(boolean) Performs a final snapshot when the rds cluster is deleted.</li>
+<li>This field not is mandatory.</li>
+<li>The value of this field can be true or alse. Default is false.</li>
+</ul></li>
+</ul>
+
+<p><strong>backups</strong></p>
+
+<p>Backup configuration.</p>
+
+<ul>
+<li><p><strong>window</strong></p>
+
+<ul>
+<li>(string) The time period at which backups will occur.</li>
+<li>This field is not mandatory.</li>
+<li>Format must be a range in the structure of DDD:HH::MM-DDD:HH::MM (Day:Hour:Minute)</li>
+</ul></li>
+
+<li><p><strong>retention</strong></p>
+
+<ul>
+<li>(int) The amount of time in days that backups will be retained for.</li>
+<li>This field is not mandatory.</li>
+<li>Must be between 1 - 35 days</li>
+</ul></li>
+</ul>
+
+<h3 id="rds-instances">RDS Instances</h3>
+
+<pre><code>rds_instances:
+  - name: rds-test-1
+    size: db.r3.xlarge
+    engine: mysql
+    engine_version: 5.7
+    port: 3306
+    public: true
+    multi_az: true
+    storage:
+      type: gp2
+      size: 100
+      iops: 5000
+    auto_upgrade: true
+    final_snapshot: true
+    license: bring-your-own-license
+    database_name: aurora-test
+    database_username: username
+    database_password: password
+    backups:
+      window: Mon:21:30-Mon:22:00
+      rentention_period: 1
+    maintenance_window: Mon:21:30-Mon:22:00
+    final_snapshot: true
+</code></pre>
+
+<p>RDS Instances support the following fields:</p>
+
+<ul>
+<li><p><strong>name</strong></p>
+
+<ul>
+<li>(string) The name of the rds instance.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+<li>This field must be unique by user &amp; manifest.</li>
+</ul></li>
+
+<li><p><strong>engine</strong></p>
+
+<ul>
+<li>(string) The engine type of the rds instance.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+<li>Currently only &lsquo;aurora&rsquo; is supported as a value.</li>
+</ul></li>
+
+<li><p><strong>engine_version</strong></p>
+
+<ul>
+<li>(string) The engine_version of the rds instance.</li>
+<li>This field is not mandatory.</li>
+</ul></li>
+
+<li><p><strong>port</strong></p>
+
+<ul>
+<li>(int) The port exposed by the rds instance.</li>
+<li>This field not is mandatory.</li>
+<li>This field must be between 1150 - 65535 (default: 3306).</li>
+</ul></li>
+
+<li><p><strong>public</strong></p>
+
+<ul>
+<li>(boolean) Sets the rds instance to be publicly accessible.</li>
+<li>This field not is mandatory.</li>
+<li>The value of this field can be true or alse. Default is false.</li>
+</ul></li>
+
+<li><p><strong>multi_az</strong></p>
+
+<ul>
+<li>(boolean) Deploys a synchronous standby instance in a different availability zone</li>
+<li>Cannot be used in conjunction with the &lsquo;availability_zone&rsquo; parameter</li>
+<li>This field not is mandatory.</li>
+<li>The value of this field can be true or alse. Default is false.</li>
+</ul></li>
+
+<li><p><strong>availability_zones</strong></p>
+
+<ul>
+<li>Array of strings. The availability zones to deploy the rds instance to.</li>
+<li>This field not is mandatory.</li>
+<li>The availability zone must be in the same region as the vpc it is deployed to.</li>
+<li>If the rds instance is set to private, there must be networks specified for each availability zone.</li>
+</ul></li>
+
+<li><p><strong>security_groups</strong></p>
+
+<ul>
+<li>Array of String&rsquo;s that defines which security groups to apply to the rds instance.</li>
+<li>This field not is mandatory.</li>
+<li>This field must specify a security group that exists on the yaml.</li>
+</ul></li>
+
+<li><p><strong>networks</strong></p>
+
+<ul>
+<li>Array of String&rsquo;s that defines which networks to expose the rds instance to.</li>
+<li>This field not is mandatory (if public is set to true).</li>
+<li>This field must specify a security group that exists on the yaml.</li>
+</ul></li>
+
+<li><p><strong>database_name</strong></p>
+
+<ul>
+<li>(string) The database name of the rds instance.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+</ul></li>
+
+<li><p><strong>database_username</strong></p>
+
+<ul>
+<li>(string) The database username of the rds instance.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+</ul></li>
+
+<li><p><strong>database_username</strong></p>
+
+<ul>
+<li>(string) The database password of the rds instance.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+</ul></li>
+
+<li><p><strong>maintenance_window</strong></p>
+
+<ul>
+<li>(string) The time period at which any maintenance tasks will occur.</li>
+<li>This field is not mandatory.</li>
+<li>Format must be a range in the structure of DDD:HH::MM-DDD:HH::MM (Day:Hour:Minute)</li>
+</ul></li>
+
+<li><p><strong>promotion_tier</strong></p>
+
+<ul>
+<li>(int) specifies the order in which an aurora replica is promoted to a primary.</li>
+<li>This field is not mandatory.</li>
+<li>Must be between 1 - 15.</li>
+<li>Default is 1.</li>
+</ul></li>
+
+<li><p><strong>auto_upgrade</strong></p>
+
+<ul>
+<li>(boolean) Performs automatic upgrades on the database (minor versions only)</li>
+<li>This field not is mandatory.</li>
+<li>The value of this field can be true or alse. Default is false.</li>
+</ul></li>
+
+<li><p><strong>replication_source</strong></p>
+
+<ul>
+<li>(string) The target an rds instance to replicate from.</li>
+<li>Must be a valid ARN (Amazon Resource Name) or instance name (if in the same region).</li>
+<li><a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html" target="_blank">http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html</a></li>
+</ul></li>
+
+<li><p><strong>final_snapshot</strong></p>
+
+<ul>
+<li>(boolean) Performs a final snapshot when the rds instance is deleted.</li>
+<li>This field not is mandatory.</li>
+<li>The value of this field can be true or alse. Default is false.</li>
+</ul></li>
+
+<li><p><strong>license</strong></p>
+
+<ul>
+<li>(string) The type of license you want to use with the database</li>
+<li>This field is not mandatory.</li>
+<li>Must be one of &lsquo;license-included&rsquo;, &lsquo;bring-your-own-license&rsquo; or &lsquo;general-public-license&rsquo;</li>
+</ul></li>
+</ul>
+
+<p><strong>storage</strong></p>
+
+<p>Storage configuration. Only configurable when using a non-aurora engine.</p>
+
+<ul>
+<li><p><strong>type</strong></p>
+
+<ul>
+<li>(string) The type of storage you want to use.</li>
+<li>This field is not mandatory.</li>
+<li>Must be one of &lsquo;gp2&rsquo; (general purpose SSD), &lsquo;io1&rsquo; (performance optimised SSD) or &lsquo;standard&rsquo; (magnetic disk)</li>
+<li>If io1 is specified, you must also set the &lsquo;iops&rsquo; parameter</li>
+</ul></li>
+
+<li><p><strong>size</strong></p>
+
+<ul>
+<li>(int) The amount of storage (GB) that you want to use.</li>
+<li>This field is not mandatory.</li>
+<li>Must be a value between 5 - 6144.</li>
+<li>Minimum size can vary between engine types.</li>
+</ul></li>
+
+<li><p><strong>iops</strong></p>
+
+<ul>
+<li>(int) The amount of iops that you want the database to be limited to.</li>
+<li>This field is mandatory if storage type is &lsquo;io1&rsquo;.</li>
+<li>This field must only be used in conjunction with &lsquo;io1&rsquo; as a storage type.</li>
+<li>Must be a multiple between 3 and 10 of the storage amount.</li>
+<li>Must also be an integer multiple of 1000.</li>
+</ul></li>
+</ul>
+
+<p><strong>backups</strong></p>
+
+<p>Backup configuration.</p>
+
+<ul>
+<li><p><strong>window</strong></p>
+
+<ul>
+<li>(string) The time period at which backups will occur.</li>
+<li>This field is not mandatory.</li>
+<li>Format must be a range in the structure of DDD:HH::MM-DDD:HH::MM (Day:Hour:Minute)</li>
+</ul></li>
+
+<li><p><strong>retention</strong></p>
+
+<ul>
+<li>(int) The amount of time in days that backups will be retained for.</li>
+<li>This field is not mandatory.</li>
+<li>Must be between 1 - 35 days</li>
 </ul></li>
 </ul>
 

@@ -553,6 +553,10 @@ networks:
     subnet: 10.0.11.0/24
     public: false
     nat_gateway: db-nat
+  - name: db-standby
+    subnet: 10.0.12.0/24
+    public: false
+    nat_gateway: db-nat
 
 nat_gateways:
   - name: db-nat
@@ -659,6 +663,29 @@ route53_zones:
         values:
           - 8.8.8.8
           - 8.8.4.4
+      - entry: db.example.com
+        type: CNAME
+        ttl: 3600
+        rds_clusters:
+          - rds-aurora
+
+rds_clusters:
+  - name: rds-aurora
+    engine: aurora
+    port: 3306
+    networks:
+      - db
+      - db-standby
+    security_groups:
+      - db-sg-1
+    database_name: test
+    database_username: test
+    database_password: testpass-2
+
+rds_instances:
+  - name: rds-test-1
+    cluster: rds-test
+    size: db.r3.xlarge
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;field-reference&#34;&gt;Field Reference&lt;/h2&gt;
@@ -1269,6 +1296,408 @@ nat_gateways:
 &lt;li&gt;The type of record must be set to A&lt;/li&gt;
 &lt;li&gt;This must target the individual instance, including the instances number, i.e. web-1&lt;/li&gt;
 &lt;li&gt;You must specify only loadbalancers or instances, not both.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;rds-clusters&#34;&gt;RDS Clusters&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;rds_clusters:
+  - name: aurora-test
+    engine: aurora
+    engine_version: 1.9
+    public: false
+    port: 3306
+    availablily_zones:
+      - eu-west-1a
+      - eu-west-1b
+      - eu-west-1c
+    security_groups:
+      - sg-1
+    networks:
+      - db-nw
+    database_name: aurora-test
+    database_username: username
+    database_password: password
+    backups:
+      window: Mon:21:30-Mon:22:00
+      rentention_period: 1
+    maintenance_window: Mon:21:30-Mon:22:00
+    final_snapshot: true
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;RDS Clusters support the following fields:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;name&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(string) The name of the rds cluster.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;This field must be unique by user &amp;amp; manifest.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;engine&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(string) The engine type of the rds cluster.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;Currently only &amp;lsquo;aurora&amp;rsquo; is supported as a value.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;engine_version&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(string) The engine_version of the rds cluster.&lt;/li&gt;
+&lt;li&gt;This field is not mandatory.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;port&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(int) The port exposed by the rds cluster.&lt;/li&gt;
+&lt;li&gt;This field not is mandatory.&lt;/li&gt;
+&lt;li&gt;This field must be between 1150 - 65535 (default: 3306).&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;public&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(boolean) Sets the rds cluster to be publicly accessible.&lt;/li&gt;
+&lt;li&gt;This field not is mandatory.&lt;/li&gt;
+&lt;li&gt;The value of this field can be true or alse. Default is false.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;availability_zones&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Array of strings. The availability zones to deploy the rds cluster to.&lt;/li&gt;
+&lt;li&gt;This field not is mandatory.&lt;/li&gt;
+&lt;li&gt;The availability zone must be in the same region as the vpc it is deployed to.&lt;/li&gt;
+&lt;li&gt;If the rds cluster is set to private, there must be networks specified for each availability zone.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;security_groups&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Array of String&amp;rsquo;s that defines which security groups to apply to the rds cluster.&lt;/li&gt;
+&lt;li&gt;This field not is mandatory.&lt;/li&gt;
+&lt;li&gt;This field must specify a security group that exists on the yaml.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;networks&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Array of String&amp;rsquo;s that defines which networks to expose the rds cluster to.&lt;/li&gt;
+&lt;li&gt;This field not is mandatory (if public is set to true).&lt;/li&gt;
+&lt;li&gt;This field must specify a security group that exists on the yaml.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;database_name&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(string) The database name of the rds cluster.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;database_username&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(string) The database username of the rds cluster.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;database_username&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(string) The database password of the rds cluster.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;maintenance_window&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(string) The time period at which any maintenance tasks will occur.&lt;/li&gt;
+&lt;li&gt;This field is not mandatory.&lt;/li&gt;
+&lt;li&gt;Format must be a range in the structure of DDD:HH::MM-DDD:HH::MM (Day:Hour:Minute)&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;replication_source&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(string) The target rds cluster or mysql instance to replicate from.&lt;/li&gt;
+&lt;li&gt;Must be a valid ARN (Amazon Resource Name).&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html&#34; target=&#34;_blank&#34;&gt;http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;final_snapshot&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(boolean) Performs a final snapshot when the rds cluster is deleted.&lt;/li&gt;
+&lt;li&gt;This field not is mandatory.&lt;/li&gt;
+&lt;li&gt;The value of this field can be true or alse. Default is false.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;backups&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Backup configuration.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;window&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(string) The time period at which backups will occur.&lt;/li&gt;
+&lt;li&gt;This field is not mandatory.&lt;/li&gt;
+&lt;li&gt;Format must be a range in the structure of DDD:HH::MM-DDD:HH::MM (Day:Hour:Minute)&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;retention&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(int) The amount of time in days that backups will be retained for.&lt;/li&gt;
+&lt;li&gt;This field is not mandatory.&lt;/li&gt;
+&lt;li&gt;Must be between 1 - 35 days&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;rds-instances&#34;&gt;RDS Instances&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;rds_instances:
+  - name: rds-test-1
+    size: db.r3.xlarge
+    engine: mysql
+    engine_version: 5.7
+    port: 3306
+    public: true
+    multi_az: true
+    storage:
+      type: gp2
+      size: 100
+      iops: 5000
+    auto_upgrade: true
+    final_snapshot: true
+    license: bring-your-own-license
+    database_name: aurora-test
+    database_username: username
+    database_password: password
+    backups:
+      window: Mon:21:30-Mon:22:00
+      rentention_period: 1
+    maintenance_window: Mon:21:30-Mon:22:00
+    final_snapshot: true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;RDS Instances support the following fields:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;name&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(string) The name of the rds instance.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;This field must be unique by user &amp;amp; manifest.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;engine&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(string) The engine type of the rds instance.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;Currently only &amp;lsquo;aurora&amp;rsquo; is supported as a value.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;engine_version&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(string) The engine_version of the rds instance.&lt;/li&gt;
+&lt;li&gt;This field is not mandatory.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;port&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(int) The port exposed by the rds instance.&lt;/li&gt;
+&lt;li&gt;This field not is mandatory.&lt;/li&gt;
+&lt;li&gt;This field must be between 1150 - 65535 (default: 3306).&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;public&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(boolean) Sets the rds instance to be publicly accessible.&lt;/li&gt;
+&lt;li&gt;This field not is mandatory.&lt;/li&gt;
+&lt;li&gt;The value of this field can be true or alse. Default is false.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;multi_az&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(boolean) Deploys a synchronous standby instance in a different availability zone&lt;/li&gt;
+&lt;li&gt;Cannot be used in conjunction with the &amp;lsquo;availability_zone&amp;rsquo; parameter&lt;/li&gt;
+&lt;li&gt;This field not is mandatory.&lt;/li&gt;
+&lt;li&gt;The value of this field can be true or alse. Default is false.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;availability_zones&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Array of strings. The availability zones to deploy the rds instance to.&lt;/li&gt;
+&lt;li&gt;This field not is mandatory.&lt;/li&gt;
+&lt;li&gt;The availability zone must be in the same region as the vpc it is deployed to.&lt;/li&gt;
+&lt;li&gt;If the rds instance is set to private, there must be networks specified for each availability zone.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;security_groups&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Array of String&amp;rsquo;s that defines which security groups to apply to the rds instance.&lt;/li&gt;
+&lt;li&gt;This field not is mandatory.&lt;/li&gt;
+&lt;li&gt;This field must specify a security group that exists on the yaml.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;networks&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Array of String&amp;rsquo;s that defines which networks to expose the rds instance to.&lt;/li&gt;
+&lt;li&gt;This field not is mandatory (if public is set to true).&lt;/li&gt;
+&lt;li&gt;This field must specify a security group that exists on the yaml.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;database_name&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(string) The database name of the rds instance.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;database_username&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(string) The database username of the rds instance.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;database_username&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(string) The database password of the rds instance.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;maintenance_window&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(string) The time period at which any maintenance tasks will occur.&lt;/li&gt;
+&lt;li&gt;This field is not mandatory.&lt;/li&gt;
+&lt;li&gt;Format must be a range in the structure of DDD:HH::MM-DDD:HH::MM (Day:Hour:Minute)&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;promotion_tier&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(int) specifies the order in which an aurora replica is promoted to a primary.&lt;/li&gt;
+&lt;li&gt;This field is not mandatory.&lt;/li&gt;
+&lt;li&gt;Must be between 1 - 15.&lt;/li&gt;
+&lt;li&gt;Default is 1.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;auto_upgrade&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(boolean) Performs automatic upgrades on the database (minor versions only)&lt;/li&gt;
+&lt;li&gt;This field not is mandatory.&lt;/li&gt;
+&lt;li&gt;The value of this field can be true or alse. Default is false.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;replication_source&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(string) The target an rds instance to replicate from.&lt;/li&gt;
+&lt;li&gt;Must be a valid ARN (Amazon Resource Name) or instance name (if in the same region).&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html&#34; target=&#34;_blank&#34;&gt;http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;final_snapshot&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(boolean) Performs a final snapshot when the rds instance is deleted.&lt;/li&gt;
+&lt;li&gt;This field not is mandatory.&lt;/li&gt;
+&lt;li&gt;The value of this field can be true or alse. Default is false.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;license&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(string) The type of license you want to use with the database&lt;/li&gt;
+&lt;li&gt;This field is not mandatory.&lt;/li&gt;
+&lt;li&gt;Must be one of &amp;lsquo;license-included&amp;rsquo;, &amp;lsquo;bring-your-own-license&amp;rsquo; or &amp;lsquo;general-public-license&amp;rsquo;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;storage&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Storage configuration. Only configurable when using a non-aurora engine.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;type&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(string) The type of storage you want to use.&lt;/li&gt;
+&lt;li&gt;This field is not mandatory.&lt;/li&gt;
+&lt;li&gt;Must be one of &amp;lsquo;gp2&amp;rsquo; (general purpose SSD), &amp;lsquo;io1&amp;rsquo; (performance optimised SSD) or &amp;lsquo;standard&amp;rsquo; (magnetic disk)&lt;/li&gt;
+&lt;li&gt;If io1 is specified, you must also set the &amp;lsquo;iops&amp;rsquo; parameter&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;size&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(int) The amount of storage (GB) that you want to use.&lt;/li&gt;
+&lt;li&gt;This field is not mandatory.&lt;/li&gt;
+&lt;li&gt;Must be a value between 5 - 6144.&lt;/li&gt;
+&lt;li&gt;Minimum size can vary between engine types.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;iops&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(int) The amount of iops that you want the database to be limited to.&lt;/li&gt;
+&lt;li&gt;This field is mandatory if storage type is &amp;lsquo;io1&amp;rsquo;.&lt;/li&gt;
+&lt;li&gt;This field must only be used in conjunction with &amp;lsquo;io1&amp;rsquo; as a storage type.&lt;/li&gt;
+&lt;li&gt;Must be a multiple between 3 and 10 of the storage amount.&lt;/li&gt;
+&lt;li&gt;Must also be an integer multiple of 1000.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;backups&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Backup configuration.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;window&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(string) The time period at which backups will occur.&lt;/li&gt;
+&lt;li&gt;This field is not mandatory.&lt;/li&gt;
+&lt;li&gt;Format must be a range in the structure of DDD:HH::MM-DDD:HH::MM (Day:Hour:Minute)&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;retention&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(int) The amount of time in days that backups will be retained for.&lt;/li&gt;
+&lt;li&gt;This field is not mandatory.&lt;/li&gt;
+&lt;li&gt;Must be between 1 - 35 days&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </description>
