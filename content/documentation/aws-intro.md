@@ -23,6 +23,7 @@ The following AWS services are supported by Ernest:
 * [ELB](https://aws.amazon.com/elasticloadbalancing/)
 * [S3](https://aws.amazon.com/s3/)
 * [Route53](https://aws.amazon.com/route53/)
+* [RDS](https://aws.amazon.com/rds/)
 
 ## Next Steps
 
