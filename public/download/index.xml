@@ -44,22 +44,6 @@
 
 &lt;p&gt;Once the box is up Ernest will be available on IP of the Docker host.&lt;/p&gt;
 
-&lt;h3 id=&#34;virtual-box&#34;&gt;Virtual Box&lt;/h3&gt;
-
-&lt;p&gt;Ideal for: testing Ernest.&lt;/p&gt;
-
-&lt;p&gt;Requirements: Vagrant and Virtual Box.&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;Clone the repo containing the Vagrantfile: &lt;code&gt;git clone https://github.com/ernestio/ernest.git&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Change to the cloned directory: &lt;code&gt;cd ernest&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Start the Ernest Vagrant Box: &lt;code&gt;vagrant up&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Once the box is up Ernest will be available on 10.50.1.11.&lt;/p&gt;
-
 &lt;h2 id=&#34;get-ernest-cli&#34;&gt;Get Ernest CLI&lt;/h2&gt;
 
 &lt;p&gt;The Ernest CLI is distributed as a binary package for all supported platforms and architectures. To install Ernest CLI, find the newest version of the &lt;a href=&#34;https://github.com/ErnestIO/ernest-cli/releases&#34; target=&#34;_blank&#34;&gt;appropriate package&lt;/a&gt; for your system and download it.&lt;/p&gt;

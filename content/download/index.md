@@ -27,20 +27,6 @@ Requirements: [Docker](https://docs.docker.com/engine/installation/), [Docker Co
 
 Once the box is up Ernest will be available on IP of the Docker host.
 
-### Virtual Box
-
-Ideal for: testing Ernest.
-
-Requirements: Vagrant and Virtual Box.
-
-1. Clone the repo containing the Vagrantfile: `git clone https://github.com/ernestio/ernest.git`
-
-2. Change to the cloned directory: `cd ernest`
-
-3. Start the Ernest Vagrant Box: `vagrant up`
-
-Once the box is up Ernest will be available on 10.50.1.11.
-
 ## Get Ernest CLI
 
 The Ernest CLI is distributed as a binary package for all supported platforms and architectures. To install Ernest CLI, find the newest version of the [appropriate package](https://github.com/ErnestIO/ernest-cli/releases) for your system and download it.
