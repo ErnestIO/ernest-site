@@ -93,6 +93,17 @@ instances:
     key_pair: db-key
     security_groups:
       - db-sg
+    volumes:
+      - volume: database-vol
+        device: /dev/sdx
+
+ebs_volumes:
+  - name: database-vol
+    type: io1
+    size: 100
+    iops: 10000
+    count: 1
+    availability_zone: eu-west-1a
 
 loadbalancers:
   - name: elb-1
@@ -360,6 +371,9 @@ instances:
     key_pair: web-key
     security_groups:
       - web-sg
+    volumes:
+      - volume: big-vol
+        device: /dev/sdx
 
 ```
 
@@ -417,6 +431,21 @@ Instances support the following fields:
  * Array that contains security groups that will be applied to the instances.
  * This field is optional.
  * This field can be empty.
+
+  **volumes**
+
+  EBS volumes to be attached to the vm. Please note that the count of the EBS volume must be greater or equal to the amount of instances specified.
+
+  * **volume**
+  * String that references the name of an EBS volume specidied on the yaml
+  * This field is mandatory
+  * This field cannot be empty or null
+
+  * **device**
+  * String that defines what device name is exposed to the instance
+  * This field is mandatory
+  * This field cannot be empty or null
+
 
 ### Load Balancers
 
@@ -884,3 +913,61 @@ Backup configuration.
  * (int) The amount of time in days that backups will be retained for.
  * This field is not mandatory.
  * Must be between 1 - 35 days
+
+
+
+ ### EBS Volumes
+
+```
+ ebs_volumes:
+   - name: database-vol
+     count: 1
+     type: io1
+     size: 100
+     iops: 10000
+     availability_zone: eu-west-1a
+     encrypted: true
+     encryption_key_id: kms-id
+```
+
+
+* **name**
+ * (string) The name of the ebs volume.
+ * This field is mandatory.
+ * This field cannot be null or empty.
+ * This field must be unique by user &amp; manifest.
+
+* **count**
+ * Integer that defines the number of volunes to be created.
+ * This field is mandatory.
+ * This field cannot be null or empty.
+ * This field must be greater or equal that 1
+
+ * **type**
+  * (string) The type of storage you want to use.
+  * This field is not mandatory.
+  * Must be one of 'gp2' (general purpose SSD), 'io1' (performance optimised SSD) or 'st1' (magnetic disk)
+  * If io1 is specified, you must also set the 'iops' parameter
+
+ * **size**
+  * (int) The amount of storage (GB) that you want to use.
+  * This field is not mandatory.
+  * Must be a value between 1 - 16384. (may vary for different storage types)
+
+ * **iops**
+  * (int) The amount of iops that you want the volume to be limited to.
+  * This field is mandatory if storage type is 'io1'.
+  * This field must only be used in conjunction with 'io1' as a storage type.
+  * Must be a multiple between 3 and 10 of the storage amount.
+  * Must also be an integer multiple of 1000.
+  * Must be a value between 100 - 20000
+
+* **encrypted**
+ * (boolean) Specifies whether the volume will be encrypted.
+ * This field not is mandatory.
+ * The value of this field can be true or false. Default is false.
+ * When enabling encryption, a kms key id must be provided
+
+* **encryption_key_id**
+ * (string) The kms key id to use when encrypting data on the volume.
+ * This field is mandatory, only if encryption is set to true.
