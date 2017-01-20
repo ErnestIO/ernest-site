@@ -615,6 +615,17 @@ instances:
     key_pair: db-key
     security_groups:
       - db-sg
+    volumes:
+      - volume: database-vol
+        device: /dev/sdx
+
+ebs_volumes:
+  - name: database-vol
+    type: io1
+    size: 100
+    iops: 10000
+    count: 1
+    availability_zone: eu-west-1a
 
 loadbalancers:
   - name: elb-1
@@ -947,6 +958,9 @@ nat_gateways:
     key_pair: web-key
     security_groups:
       - web-sg
+    volumes:
+      - volume: big-vol
+        device: /dev/sdx
 
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -1032,6 +1046,26 @@ nat_gateways:
 &lt;li&gt;This field is optional.&lt;/li&gt;
 &lt;li&gt;This field can be empty.&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;volumes&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;EBS volumes to be attached to the vm. Please note that the count of the EBS volume must be greater or equal to the amount of instances specified.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;volume&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;String that references the name of an EBS volume specidied on the yaml&lt;/li&gt;
+&lt;li&gt;This field is mandatory&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;This field cannot be empty or null&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;device&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;String that defines what device name is exposed to the instance&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;This field is mandatory&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;This field cannot be empty or null&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&#34;load-balancers&#34;&gt;Load Balancers&lt;/h3&gt;
@@ -1698,6 +1732,88 @@ nat_gateways:
 &lt;li&gt;(int) The amount of time in days that backups will be retained for.&lt;/li&gt;
 &lt;li&gt;This field is not mandatory.&lt;/li&gt;
 &lt;li&gt;Must be between 1 - 35 days&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;### EBS Volumes&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; ebs_volumes:
+   - name: database-vol
+     count: 1
+     type: io1
+     size: 100
+     iops: 10000
+     availability_zone: eu-west-1a
+     encrypted: true
+     encryption_key_id: kms-id
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;name&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(string) The name of the ebs volume.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+&lt;li&gt;This field must be unique by user &amp;amp; manifest.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;count&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Integer that defines the number of volunes to be created.&lt;/li&gt;
+&lt;li&gt;This field is mandatory.&lt;/li&gt;
+&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;This field must be greater or equal that 1&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;type&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;(string) The type of storage you want to use.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;This field is not mandatory.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Must be one of &amp;lsquo;gp2&amp;rsquo; (general purpose SSD), &amp;lsquo;io1&amp;rsquo; (performance optimised SSD) or &amp;lsquo;st1&amp;rsquo; (magnetic disk)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;If io1 is specified, you must also set the &amp;lsquo;iops&amp;rsquo; parameter&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;size&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;(int) The amount of storage (GB) that you want to use.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;This field is not mandatory.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Must be a value between 1 - 16384. (may vary for different storage types)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;iops&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;(int) The amount of iops that you want the volume to be limited to.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;This field is mandatory if storage type is &amp;lsquo;io1&amp;rsquo;.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;This field must only be used in conjunction with &amp;lsquo;io1&amp;rsquo; as a storage type.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Must be a multiple between 3 and 10 of the storage amount.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Must also be an integer multiple of 1000.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Must be a value between 100 - 20000&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;encrypted&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(boolean) Specifies whether the volume will be encrypted.&lt;/li&gt;
+&lt;li&gt;This field not is mandatory.&lt;/li&gt;
+&lt;li&gt;The value of this field can be true or false. Default is false.&lt;/li&gt;
+&lt;li&gt;When enabling encryption, a kms key id must be provided&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;encryption_key_id&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(string) The kms key id to use when encrypting data on the volume.&lt;/li&gt;
+&lt;li&gt;This field is mandatory, only if encryption is set to true.&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </description>

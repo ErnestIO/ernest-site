@@ -51,7 +51,7 @@
     },
     "datePublished": "2016-06-06",
     "description": "",
-    "wordCount":  3272 
+    "wordCount":  3656 
   }
 </script>
 
@@ -426,6 +426,17 @@ instances:
     key_pair: db-key
     security_groups:
       - db-sg
+    volumes:
+      - volume: database-vol
+        device: /dev/sdx
+
+ebs_volumes:
+  - name: database-vol
+    type: io1
+    size: 100
+    iops: 10000
+    count: 1
+    availability_zone: eu-west-1a
 
 loadbalancers:
   - name: elb-1
@@ -758,6 +769,9 @@ nat_gateways:
     key_pair: web-key
     security_groups:
       - web-sg
+    volumes:
+      - volume: big-vol
+        device: /dev/sdx
 
 </code></pre>
 
@@ -843,6 +857,26 @@ nat_gateways:
 <li>This field is optional.</li>
 <li>This field can be empty.</li>
 </ul></li>
+</ul>
+
+<p><strong>volumes</strong></p>
+
+<p>EBS volumes to be attached to the vm. Please note that the count of the EBS volume must be greater or equal to the amount of instances specified.</p>
+
+<ul>
+<li><strong>volume</strong></li>
+<li>String that references the name of an EBS volume specidied on the yaml</li>
+<li>This field is mandatory</li>
+
+<li><p>This field cannot be empty or null</p></li>
+
+<li><p><strong>device</strong></p></li>
+
+<li><p>String that defines what device name is exposed to the instance</p></li>
+
+<li><p>This field is mandatory</p></li>
+
+<li><p>This field cannot be empty or null</p></li>
 </ul>
 
 <h3 id="load-balancers">Load Balancers</h3>
@@ -1509,6 +1543,88 @@ nat_gateways:
 <li>(int) The amount of time in days that backups will be retained for.</li>
 <li>This field is not mandatory.</li>
 <li>Must be between 1 - 35 days</li>
+</ul></li>
+</ul>
+
+<p>### EBS Volumes</p>
+
+<pre><code> ebs_volumes:
+   - name: database-vol
+     count: 1
+     type: io1
+     size: 100
+     iops: 10000
+     availability_zone: eu-west-1a
+     encrypted: true
+     encryption_key_id: kms-id
+</code></pre>
+
+<ul>
+<li><p><strong>name</strong></p>
+
+<ul>
+<li>(string) The name of the ebs volume.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+<li>This field must be unique by user &amp; manifest.</li>
+</ul></li>
+
+<li><p><strong>count</strong></p>
+
+<ul>
+<li>Integer that defines the number of volunes to be created.</li>
+<li>This field is mandatory.</li>
+<li>This field cannot be null or empty.</li>
+
+<li><p>This field must be greater or equal that 1</p></li>
+
+<li><p><strong>type</strong></p></li>
+
+<li><p>(string) The type of storage you want to use.</p></li>
+
+<li><p>This field is not mandatory.</p></li>
+
+<li><p>Must be one of &lsquo;gp2&rsquo; (general purpose SSD), &lsquo;io1&rsquo; (performance optimised SSD) or &lsquo;st1&rsquo; (magnetic disk)</p></li>
+
+<li><p>If io1 is specified, you must also set the &lsquo;iops&rsquo; parameter</p></li>
+
+<li><p><strong>size</strong></p></li>
+
+<li><p>(int) The amount of storage (GB) that you want to use.</p></li>
+
+<li><p>This field is not mandatory.</p></li>
+
+<li><p>Must be a value between 1 - 16384. (may vary for different storage types)</p></li>
+
+<li><p><strong>iops</strong></p></li>
+
+<li><p>(int) The amount of iops that you want the volume to be limited to.</p></li>
+
+<li><p>This field is mandatory if storage type is &lsquo;io1&rsquo;.</p></li>
+
+<li><p>This field must only be used in conjunction with &lsquo;io1&rsquo; as a storage type.</p></li>
+
+<li><p>Must be a multiple between 3 and 10 of the storage amount.</p></li>
+
+<li><p>Must also be an integer multiple of 1000.</p></li>
+
+<li><p>Must be a value between 100 - 20000</p></li>
+</ul></li>
+
+<li><p><strong>encrypted</strong></p>
+
+<ul>
+<li>(boolean) Specifies whether the volume will be encrypted.</li>
+<li>This field not is mandatory.</li>
+<li>The value of this field can be true or false. Default is false.</li>
+<li>When enabling encryption, a kms key id must be provided</li>
+</ul></li>
+
+<li><p><strong>encryption_key_id</strong></p>
+
+<ul>
+<li>(string) The kms key id to use when encrypting data on the volume.</li>
+<li>This field is mandatory, only if encryption is set to true.</li>
 </ul></li>
 </ul>
 
