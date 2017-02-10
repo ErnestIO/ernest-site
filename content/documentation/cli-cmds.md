@@ -34,7 +34,7 @@ NAME:
    ernest info - Display system-wide information.
 
 USAGE:
-   ernest info  
+   ernest info
 
 DESCRIPTION:
    Displays ernest instance information.
@@ -49,7 +49,7 @@ NAME:
    ernest login - Login with your Ernest credentials.
 
 USAGE:
-   ernest login [command options]  
+   ernest login [command options]
 
 DESCRIPTION:
    Logs an user into Ernest instance.
@@ -333,24 +333,24 @@ DESCRIPTION:
    Create a new AWS datacenter on the targeted instance of Ernest.
 
   Example:
-   $ ernest datacenter create aws --region region --secret_access_key secret_access_key --access_key_id access_key_id my_datacenter
+   $ ernest datacenter create aws --region us-west-2 --access_key_id AKIAIOSFODNN7EXAMPLE --secret_access_key wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY my_datacenter
 
    Template example:
     $ ernest datacenter create aws --template mydatacenter.yml mydatacenter
     Where mydatacenter.yaml will look like:
       ---
       fake: true
-      secret_access_key: secret_access_key
-      access_key_id: access_key_id
-      region: region
+      access_key_id : AKIAIOSFODNN7EXAMPLE
+      secret_access_key: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+      region: us-west-2
    
 
 OPTIONS:
-   --region value    Datacenter region
-   --secret_access_key value     AWS secret_access_key
-   --access_key_id value    AWS access_key_id
-   --template value  Datacenter template
-   --fake            Fake datacenter
+   --region value, -r value             Datacenter region
+   --access_key_id value, -k value      AWS access key id
+   --secret_access_key value, -s value  AWS Secret access key
+   --template value, -t value           Datacenter template
+   --fake, -f                           Fake datacenter
 ```
 
 `ernest datacenter update vcloud`
@@ -386,12 +386,12 @@ DESCRIPTION:
    Updates the specified AWS datacenter.
 
    Example:
-    $ ernest datacenter update aws --secret_access_key <secret_access_key> --access_key_id <access_key_id> my_datacenter
+    $ ernest datacenter update aws --access_key_id AKIAIOSFODNN7EXAMPLE --secret_access_key wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY my_datacenter
   
 
 OPTIONS:
-   --secret_access_key value   Your AWS valid secret_access_key 
-   --access_key_id value  Your AWS valid access_key_id
+   --access_key_id value      Your AWS access key id
+   --secret_access_key value  Your AWS secret access key
 ```
 
 `ernest datacenter delete`
@@ -458,7 +458,8 @@ DESCRIPTION:
   
 
 OPTIONS:
-   --force, -f  Force destroy command without asking for permission.
+   --force, -f  Hard ernest service removal.
+   --yes, -y    Destroy a service without prompting confirmation.
 ```
 
 `ernest service history`
@@ -546,6 +547,40 @@ DESCRIPTION:
     $ ernest monitor my_service
 ```
 
+`ernest service diff`
+```
+NAME:
+   ernest service diff - $ ernest service diff <service_name> <build_a> <build_b>
+
+USAGE:
+   ernest service diff <service_name> <build_a> <build_b>
+
+DESCRIPTION:
+   Will display the diff between two different builds
+
+   Examples:
+    $ ernest service diff my_service 1 2
+```
+
+`ernest service import`
+```
+NAME:
+   ernest service import - $ ernest service import <my_datacenter> <my_service>
+
+USAGE:
+   ernest service import [command options] <service_name>
+
+DESCRIPTION:
+   Will import te service <my_service> from datacenter <datacenter_name>
+
+   Examples:
+    $ ernest service import my_datacenter my_service
+  
+
+OPTIONS:
+   --datacenter value  Datacenter name
+```
+
 `ernest preferences logger list`
 ```
 NAME:
@@ -575,12 +610,12 @@ DESCRIPTION:
    Example:
     $ ernest preferences logger add basic --logfile /tmp/ernest.log
     $ ernest preferences logger add logstash --hostname 10.50.1.1 --port 5000 --timeout 50000
-    $ ernest preferences logger add rollbar --secret_access_key MY_ROLLBAR_TOKEN
+    $ ernest preferences logger add rollbar --token MY_ROLLBAR_TOKEN
   
 
 OPTIONS:
    --logfile value   Specify the path for the loging file
-   --secret_access_key value     Rollbar token
+   --token value     Rollbar token
    --env value       Rollbar environment
    --hostname value  Logstash hostname
    --port value      Logstash port (default: 0)
@@ -601,3 +636,58 @@ DESCRIPTION:
    Example:
     $ ernest preferences logger delete basic
 ```
+
+`ernest docs`
+```
+NAME:
+   ernest docs - Open docs in the default browser.
+
+USAGE:
+   ernest docs  
+
+DESCRIPTION:
+   Open docs in the default browser.
+
+   Example:
+    $ ernest docs
+```
+
+`ernest setup`
+```
+NAME:
+   ernest setup - Use it to setup your ernest instance
+
+USAGE:
+   ernest setup [command options] [arguments...]
+
+DESCRIPTION:
+   This command will help you to setup your ernest instance by:
+- [ ] configure ernest-cli target
+- [ ] create a plain user
+- [ ] create a group
+- [ ] link the user to the group
+- [ ] login as the newly created user.
+- [ ] create a new datacenter (optional)
+  
+
+OPTIONS:
+   --user value, -u value      Admin user
+   --password value, -p value  Admin password
+   --target value, -t value    Ernest location
+```
+
+`ernest component`
+```
+NAME:
+   ernest component - Components related subcommands
+
+USAGE:
+   ernest component command [command options] [arguments...]
+
+COMMANDS:
+     list  List components on your datacenter.
+
+OPTIONS:
+   --help, -h  show help
+```
+
