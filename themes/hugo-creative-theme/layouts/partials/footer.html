@@ -1,0 +1,13 @@
+{{ "<!-- FOOTER -->" | safeHTML }}
+<section class="bg-dark" id="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 col-lg-offset-1 text-center">
+            {{ if and .Site.Params.footer.headline .Site.Params.footer.description }}
+                    <hr class="primary">
+                {{ end }}
+                {{ with .Site.Params.footer.description }}
+                    <p>{{ . | markdownify }}</p>
+                {{ end }}
+            </div>
+            
