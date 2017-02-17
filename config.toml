@@ -1,127 +1,117 @@
-baseurl = "/"
-
-# Site title
-title = "ernest.io"
-
-
-# Copyright
-copyright = "(c) 2016 R3 Labs"
-
-# Language
-languageCode = "en-EN"
-
-# SES friendly url:s
-canonifyurls = true
-
-# Frontmatter format
-# "yaml", "toml", "json"
-metaDataFormat = "toml"
-
-# Theme to use (located in /themes/THEMENAME/)
-# theme = "hugo-bootstrap-premium"
-
-# Pagination
-paginate = 10
-paginatePath = "page"
-
-# Enable Disqus integration
-disqusShortname = "shortname"
-
-[permalinks]
-    post = "/:year/:month/:day/:slug/"
-    code = "/:slug/"
-
-[taxonomies]
-    tag = "tags"
-    topic = "topics"
-
-[author]
-    name = "Jason Reid"
-    email = "jason.reid@r3labs.io"
-
-#
-# All parameters below here are optional and can be mixed and matched.
-#
-
-[params.theme]
-    name = "ernest"
-
-[params.popover]
-    # This is a highly configurable popover form.
-    enablepopover = false #enable or disable popover: true/false.
-    posturl = "https://zapier.com/hooks/catch/1227563/" # Your zapier post hook.
-    headerimage = "//placehold.it/1000x600"
-    expirecookie = 5 #show it again after number of days to visitors that has not subscribed.
-    cookiename = "mycookie1" #give the cookie a unique name variable (avoid spaces and strange characters).
-    signupheader = "Join Our Newsletter"
-    showmodaltimeout = 10000 #show popover modal after time interval in milliseconds.
-    mouseleave = true #show popover when mouse leaves window: true/false.
-    modalsize = "" #lg or sm. Empty is md. If phone is detected lg is used.
-    imagedescription = "Placeholder image for this popover modal optin form"
-    signuptext = "Signup today for free and be the first to get notified on new updates."
-    inputplaceholder = "Enter your email"
-    submitbutton = "Subscribe"
-    successmessage = "Thanks for your subscription!"
-    errormessage = "Submitting form failed!"
-    optin = true #opt-in: true/false
+baseurl = "https://example.org/"
+languageCode = "en-us"
+title = "Ernest"
+theme = "hugo-creative-theme"
+googleAnalytics = ""
 
 [params]
-    # You can use markdown here.
-    BrandImage = "/img/ernest-logo.png" #top header brand image.
-    brand = "ernest.io by R3 Labs" # brand image alt text.
-    SponsorImage = "/img/r3labs-logo.png" #bottom footer sponsor image.
-    sponsor = "ernest.io by R3 Labs" #sponsor image alt text.
-    SponsorURL = "http://r3labs.io"
-    topline = "Application Orchestration"
-    footline = "Ernest Orchetsration Tool"
+
+	# You can use Markdown syntax for urls [text](//url.to/source) for
+	# most longer texts.
+
+	# All icons using Fontawesome's icon font. Look at http://fontawesome.io/icons/
+	# for more icons. The icons are represented by their corresponding
+	# CSS class.
+
+	# All projects of the portfolio are defined in their own files.
+	# You can find example projects at 'exampleSite/data/projects'. Copy the 'projects'
+	# folder into the 'data' directory at the root of this Hugo site.
+	# For more information take a look at the README.
+
+	# To provide some metadata for search engines feel free to add some
+	# information about you and your website.
+	name = "Your name"
+	description = "Your description"
+
+	# The path must be relative to the static folder
+	favicon = "favicon.ico"
 
 
-    # Text for the top menu link, which goes to the root URL for the site.
-    # Default (if omitted) is "Home".
-    home = "home"
+	# Navigation
+	[params.navigation]
+		brand = "Ernest"
 
-    mailmunchid = "" # Mailmunch site id
-    sumomeid = "" # Sumome id
+		[params.navigation.links]
+			about     = "About"
+      docs      = "Documentation"
+			services  = "Services"
+			contact   = "Contact"
+			Started   = "Getting Started"
 
-	# Show a sidebar menu
-    showRightSidebar = false
-    
-    # Select a syntax highlight.
-    # Check the static/css/highlight directory for options.
-    highlight = "solarized_dark"
 
-    # Google Analytics.
-    googleAnalytics = "UA-86033085-1"
 
-    # Sidebar social links.
-    github = "r3labs" # Your Github profile ID
-    # bitbucket = "" # Your Bitbucket profile ID
-    linkedin = "r3labs" # Your LinkedIn profile ID (from public URL)
-    # googleplus = "Myprofile" # Your Google+ profile ID
-    facebook = "r3labsio" # Your Facebook profile ID
-    twitter = "r3labs" # Your Twitter profile ID
-    # youtube = ""  # Your Youtube channel ID
-    # flattr = ""  # populate with your flattr uid
+	# Hero section
+	[params.hero]
+		# To change the background of the hero section, replace the 'header.jpg' at './static/img' with your own.
+		slogan     = "Developer driven Orchestration"
+		subtitle   = "Ernest is an open source layer that lets you drive cloud infrastructure and platforms thorough a simple config file inside your application"
+		buttonText = "Ernest 1.12.0 is out now!"
 
-[blackfriday]
-    angledQuotes = true
-    fractions = false
-    hrefTargetBlank = true
-    latexDashes = true
-    plainIdAnchors = true
-    extensions = []
-    extensionmask = []
 
-[[menu.documentation]]
-  name = "Introduction"
-  weight = 0
-[[menu.documentation]]
-  name = "Amazon Web Services"
-  weight = 1
-[[menu.documentation]]
-  name = "vCloud Director"
-  weight = 2
-[[menu.developer]]
-  name = "Developer documentation"
-  weight = 0
 
+	# About section
+	[params.about]
+		headline    = "DevOps inside your application to stop you being blocked by the slowest team"
+		description = "Ernest is infrastructure and platform as code defined by developers in their applications, delivered autonomously in any cloud or in house. Ernest lets you maximise the velocity of software delivery "
+		buttonText  = "Documentation"
+
+#
+  # Portfolio modals
+#  [params.portfolio.modal]
+#    client = "Client"
+#    date = "Date"
+#    category = "Category"
+#    buttonText = "Close"
+
+	# Service section
+	[params.services]
+		headline = ""
+
+        [[params.services.list]]
+            icon = "fa-legal"
+            title = "Compliance"
+            description = "Ernest has no external dependencies so you can use it to manage any compliance-affected environment"
+
+        [[params.services.list]]
+			icon = "fa-tasks"
+			title = "Manage"
+			description = "Reproduce and deploy to multiple clouds, ingest existing systems and elegantly support changes to running environments"
+
+		[[params.services.list]]
+            icon = "fa-users"
+            title = "Collaboration"
+            description = "A centralized tool designed to support complex collaboration and sharing across teams and organisations."
+
+        [[params.services.list]]
+            icon = "fa-gears"
+            title = "Change"
+            description = "Gracefully change running systems and perform orderly resizes much like a sysadmin might do manually"
+
+
+
+    # Aside section
+	[params.aside]
+		headline = "Ernest is open source. It's hosted, developed and maintained on GitHub."
+
+		[params.aside.button]
+			text = "View the GitHub Project"
+			link = "//github.com/ernestio/ernest"
+
+	# Contact section
+	[params.contact]
+		headline = "Get In Touch!"
+		description = "We like hearing from people! Give us a call or send us an email and we will get back to you as soon as possible!"
+		address = "18-21 Corsham Street London N1 6DR"
+		email = "info@r3labs.io"
+
+	# Google Maps section
+	[params.location]
+	  latitude  = "51.528891"
+		longitude = "-0.080853"
+		maps_api_key = ""
+
+  # footer section
+  [params.footer]
+    description = "Designed and built by [R3 Labs](http://www.r3labs.io/). Maintained by the [core team](https://github.com/orgs/ernestio/people) with the excellent help of our [contributors](https://github.com/ernestio/ernest/graphs/contributors). <br> Code licensed under Mozilla 2.0. You can find us on [Twitter](https://twitter.com/r3labs), [Slack](http://ernest.io/slack/) and [Google](https://groups.google.com/forum/#!forum/ernestio)"
+  	address = "18-21 Corsham Street London N1 6DR"
+  	email = "info@r3labs.io"

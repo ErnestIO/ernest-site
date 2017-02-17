@@ -1,9 +1,0 @@
-{{ partial "head" . }}
-<div id="main-con">
-      {{ range .Data.Pages }}
-        {{if eq .Type "index" }}
-          {{.Content}}
-        {{end}}
-      {{ end }}
-</div>
-{{ partial "foot" . }}
