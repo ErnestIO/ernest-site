@@ -1,9 +1,0 @@
-<div class="pull-left">
-  <a class="footer-brand-img" href="{{.Site.BaseURL}}">
-    <img alt="{{ .Site.Params.sponsor }}" src="{{ .Site.Params.SponsorImage }}">
-  </a>
-<div class="pull-right">
-  {{ range .Site.Data.FootMenu }}
-  <a href="{{ .URL | absURL }}" {{ if and ( isset . "Title" ) ( ne .Title "" ) }} title="{{ .Title }}" {{ end }}>{{ .Name }}</a>
-  {{ end }}
-</div>
