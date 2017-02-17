@@ -33,9 +33,10 @@ googleAnalytics = ""
 
 		[params.navigation.links]
 			about     = "About"
-#      portfolio = "Portfolio"
+      docs      = "Documentation"
 			services  = "Services"
 			contact   = "Contact"
+			Started   = "Getting Started"
 
 
 
