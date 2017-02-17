@@ -1,7 +1,12 @@
-baseurl = "https://example.org/"
-languageCode = "en-us"
+baseurl = "/"
+languageCode = "en-EN"
 title = "Ernest"
 theme = "hugo-creative-theme"
+
+# Copyright
+copyright = "(c) 2016 R3 Labs"
+
+
 googleAnalytics = ""
 
 [params]
