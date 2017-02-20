@@ -1,10 +1,10 @@
 baseurl = "/"
 languageCode = "en-EN"
-title = "Ernest"
+title = "Ernest - Developer driven Orchestration"
 theme = "hugo-creative-theme"
 
 # Copyright
-copyright = "(c) 2016 R3 Labs"
+copyright = "(c) 2017 R3 Labs"
 
 
 googleAnalytics = ""
@@ -25,8 +25,8 @@ googleAnalytics = ""
 
 	# To provide some metadata for search engines feel free to add some
 	# information about you and your website.
-	name = "Your name"
-	description = "Your description"
+	name = "R3 Labs"
+	description = "Developer driven Orchestration"
 
 	# The path must be relative to the static folder
 	favicon = "favicon.ico"
@@ -38,10 +38,10 @@ googleAnalytics = ""
 
 		[params.navigation.links]
 			about     = "About"
-      docs      = "Documentation"
+            docs      = "Documentation"
 			services  = "Services"
 			contact   = "Contact"
-			Started   = "Getting Started"
+			started   = "Getting Started"
 
 
 
@@ -112,8 +112,8 @@ googleAnalytics = ""
 	# Google Maps section
 	[params.location]
 	  latitude  = "51.528891"
-		longitude = "-0.080853"
-		maps_api_key = ""
+	  longitude = "-0.080853"
+	  maps_api_key = "AIzaSyCSRrPgUA3WJZABkKBRs1fenOcDiMFzHKk"
 
   # footer section
   [params.footer]
