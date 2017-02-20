@@ -1,6 +1,6 @@
 baseurl = "/"
 languageCode = "en-EN"
-title = "Ernest - Developer driven Orchestration"
+title = "Ernest - Developer Driven Orchestration"
 theme = "hugo-creative-theme"
 
 # Copyright
@@ -26,7 +26,7 @@ googleAnalytics = ""
 	# To provide some metadata for search engines feel free to add some
 	# information about you and your website.
 	name = "R3 Labs"
-	description = "Developer driven Orchestration"
+	description = "Developer Driven Orchestration - Ernest is an open source layer that lets you drive cloud infrastructure and platforms thorough a simple config file inside your application"
 
 	# The path must be relative to the static folder
 	favicon = "favicon.ico"
