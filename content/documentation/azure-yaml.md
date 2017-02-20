@@ -29,8 +29,6 @@ datacenter: my-dc
 ```
 name: demo
 datacenter: my-dc
-vpc_id: vpc-abcdef01
-vpc_subnet: 10.0.0.0/16
 
 ```
 
@@ -48,18 +46,51 @@ Service Options support the following fields:
  * This field cannot be null or empty.
  * The value of this field must 50 characters maximum.
 
+
+## Resource groups
+
+Every single azure resource is part of a resource group, so, in order to create any resource, you'll first need a resource group. 
+Resource groups are pretty simple, they just need 2 required fields,name and location. This will allow multi-location definitions environments support.
+
+```
+resource_group:
+  - name: web
+    location: westus
+    tags:
+      - environment: production
+```
+
+Resource groups are defined by the following fields:
+
+**name**
+  * String defining the name of the resource group
+  * Must be unique on all your azure subscription.
+
+**location**
+  * String defining the location where the resource group should be created.
+  * All resources on this resource group will inherit this location
+  * Check the list of all valid Azure locations [here](https://azure.microsoft.com/en-us/regions/)
+
+**tags**
+  * A key-value map of tags to assign to the resource group
+
+Resource groups are a container to have together multiple resources, lets see below which ones are supported:
+
 ### Virtual Networks
 
 ```
-virtual_networks:
-  - name: web
-    address_space: 
-      - "10.1.2.0/24"
-    location = "West US"
-    subnet:   
-      name: subnet1
-      address: 10.1.2.0/25
 
+    virtual_networks:
+      - name: vm_test                           # Required: The name of the virtual network. Changing this forces a new resource to be created.
+        address_spaces:                         # Required : The address space that is used the virtual network. You can supply more than one address space. Changing this forces a new resource to be created.
+          - 10.0.0.0/16
+        dns_servers:                            # Optional : List of IP addresses of DNS servers
+          - 8.8.8.8
+          - 4.4.4.4
+        subnets:                                # Optional : Can be specified multiple times to define multiple subnets.
+          - name: sub_test                        # Required : The name of the subnet.
+            address_prefix: 10.0.1.0/24           # Required : The address prefix to use for the subnet.
+            security_group: my_security_group     # Optional : The Network Security Group to associate with the subnet. (Referenced by name.
 ```
 
 Networking supports the following fields:
