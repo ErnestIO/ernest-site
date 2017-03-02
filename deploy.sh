@@ -17,5 +17,5 @@ git commit -m "$msg"
 
 # Push source and build repos.
 git push origin master
-cd public && git commit -am "Automated deploy" && git push origin gh-pages
-# git subtree push --prefix=public git@github.com:ernestio/ernest-site.git gh-pages
+# cd public && git commit -am "Automated deploy" && git push origin gh-pages
+git subtree push --prefix=public git@github.com:ernestio/ernest-site.git gh-pages
