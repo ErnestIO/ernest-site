@@ -29,7 +29,7 @@ googleAnalytics = ""
 	description = "Developer Driven Orchestration - Ernest is an open source layer that lets you drive cloud infrastructure and platforms thorough a simple config file inside your application"
 
 	# The path must be relative to the static folder
-	favicon = "favicon.ico"
+	favicon = "dog.ico"
 
 
 	# Navigation
