@@ -117,6 +117,6 @@ googleAnalytics = "UA-86033085-1"
 
   # footer section
   [params.footer]
-    description = "Designed and built by [R3 Labs](http://www.r3labs.io/). Maintained by the [core team](https://github.com/orgs/ernestio/people) with the excellent help of our [contributors](https://github.com/ernestio/ernest/graphs/contributors). <br> Code licensed under Mozilla 2.0. You can find us on [Twitter](https://twitter.com/r3labs), [Slack](http://ernest.io/slack/) and [Google](https://groups.google.com/forum/#!forum/ernestio)"
+    description = "Designed and built by [R3 Labs](http://www.r3labs.io/). Maintained by the [core team](https://github.com/orgs/ernestio/people) with the excellent help of our [contributors](https://github.com/ernestio/ernest/graphs/contributors). <br> Code licensed under Mozilla 2.0. You can find us on [Twitter](https://twitter.com/r3labs), [Slack](http://docs.ernest.io/slack/) and [Google](https://groups.google.com/forum/#!forum/ernestio)"
   	address = "2 Leman Street London E1 8FA"
   	email = "info@r3labs.io"
