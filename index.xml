@@ -8,7 +8,9 @@
     <language>en-EN</language>
     <copyright>(c) 2017 R3 Labs</copyright>
     <lastBuildDate>Mon, 06 Jun 2016 00:00:00 +0000</lastBuildDate>
-    <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>Azure YAML Reference</title>
@@ -16,143 +18,10 @@
       <pubDate>Mon, 06 Jun 2016 00:00:00 +0000</pubDate>
       
       <guid>/documentation/azure-yaml/</guid>
-      <description>
-
-&lt;h1 id=&#34;azure-yaml-reference&#34;&gt;Azure YAML Reference&lt;/h1&gt;
-
-&lt;p&gt;Environments built and managed with Ernest are defined in YAML format.&lt;/p&gt;
-
-&lt;h2 id=&#34;example&#34;&gt;Example&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code&gt;---
-name: demo
-datacenter: my-dc
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;field-reference&#34;&gt;Field Reference&lt;/h2&gt;
-
-&lt;h3 id=&#34;service-options&#34;&gt;Service Options&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code&gt;name: demo
-datacenter: my-dc
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Service Options support the following fields:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;name&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;String that defines the name of the service to build.&lt;/li&gt;
-&lt;li&gt;This field is mandatory.&lt;/li&gt;
-&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
-&lt;li&gt;The value of this field must be 50 characters maximum.&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;datacenter&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;String that defines the name of the datacenter where the service is built.&lt;/li&gt;
-&lt;li&gt;This field is mandatory.&lt;/li&gt;
-&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
-&lt;li&gt;The value of this field must 50 characters maximum.&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;resource-groups&#34;&gt;Resource groups&lt;/h2&gt;
-
-&lt;p&gt;Every single azure resource is part of a resource group, so, in order to create any resource, you&amp;rsquo;ll first need a resource group.
-Resource groups are pretty simple, they just need 2 required fields,name and location. This will allow multi-location definitions environments support.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;resource_group:
-  - name: web
-    location: westus
-    tags:
-      - environment: production
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Resource groups are defined by the following fields:&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;name&lt;/strong&gt;
-  * String defining the name of the resource group
-  * Must be unique on all your azure subscription.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;location&lt;/strong&gt;
-  * String defining the location where the resource group should be created.
-  * All resources on this resource group will inherit this location
-  * Check the list of all valid Azure locations &lt;a href=&#34;https://azure.microsoft.com/en-us/regions/&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;tags&lt;/strong&gt;
-  * A key-value map of tags to assign to the resource group&lt;/p&gt;
-
-&lt;p&gt;Resource groups are a container to have together multiple resources, lets see below which ones are supported:&lt;/p&gt;
-
-&lt;h3 id=&#34;virtual-networks&#34;&gt;Virtual Networks&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code&gt;
-    virtual_networks:
-      - name: vm_test                           # Required: The name of the virtual network. Changing this forces a new resource to be created.
-        address_spaces:                         # Required : The address space that is used the virtual network. You can supply more than one address space. Changing this forces a new resource to be created.
-          - 10.0.0.0/16
-        dns_servers:                            # Optional : List of IP addresses of DNS servers
-          - 8.8.8.8
-          - 4.4.4.4
-        subnets:                                # Optional : Can be specified multiple times to define multiple subnets.
-          - name: sub_test                        # Required : The name of the subnet.
-            address_prefix: 10.0.1.0/24           # Required : The address prefix to use for the subnet.
-            security_group: my_security_group     # Optional : The Network Security Group to associate with the subnet. (Referenced by name.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Networking supports the following fields:&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;virtual networks&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;An Azure virtual network (VNet) is a representation of your own network in the cloud. It is a logical isolation of the Azure cloud dedicated to your subscription. &lt;a href=&#34;https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-overview&#34;&gt;+Info&lt;/a&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;name&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;String that defines the name of the virtual network&lt;/li&gt;
-&lt;li&gt;This field is mandatory.&lt;/li&gt;
-&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;address_space&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Strings array defining the multiple address spaces used by the virtual network.&lt;/li&gt;
-&lt;li&gt;It must follow CIDR notation as described &lt;a href=&#34;https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing&#34;&gt;here&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;This field is mandatory.&lt;/li&gt;
-&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;location&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;String defining the location/region where the virtual network will be created.&lt;/li&gt;
-&lt;li&gt;This field is mandatory.&lt;/li&gt;
-&lt;li&gt;This field cannot be null or empty.&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;subnet:name&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;String defining the subnet name to be used&lt;/li&gt;
-&lt;li&gt;This field is mandatory.&lt;/li&gt;
-&lt;li&gt;This field can be empty.&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;subnet:address&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;String defining the subnet address prefix to use for the subnet&lt;/li&gt;
-&lt;li&gt;This field is mandatory.&lt;/li&gt;
-&lt;li&gt;This field can be empty.&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
+      <description>Azure YAML Reference Environments built and managed with Ernest are defined in YAML format.
+Example --- name: demo datacenter: my-dc  Field Reference Service Options name: demo datacenter: my-dc  Service Options support the following fields:
+ name
+ String that defines the name of the service to build. This field is mandatory. This field cannot be null or empty. The value of this field must be 50 characters maximum.</description>
     </item>
     
   </channel>
