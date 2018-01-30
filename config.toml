@@ -4,7 +4,7 @@ title = "Ernest - Developer Driven Orchestration?!?!"
 theme = "hugo-creative-theme"
 
 # Copyright
-copyright = "(c) 2017 R3 Labs"
+copyright = "(c) 2018 Ernest IO"
 
 
 googleAnalytics = "UA-86033085-1"
@@ -25,7 +25,7 @@ googleAnalytics = "UA-86033085-1"
 
 	# To provide some metadata for search engines feel free to add some
 	# information about you and your website.
-	name = "R3 Labs"
+	name = "Ernest IO"
 	description = "Developer Driven Orchestration - Ernest is an open source layer that lets you drive cloud infrastructure and platforms thorough a simple config file inside your application"
 
 	# The path must be relative to the static folder
@@ -107,7 +107,7 @@ googleAnalytics = "UA-86033085-1"
 		headline = "Get In Touch!"
 		description = "We like hearing from people! Give us a call or send us an email and we will get back to you as soon as possible!"
 		address = "2 Leman Street London E1 8FA"
-		email = "info@r3labs.io"
+		email = "info@ernest.io"
 
 	# Google Maps section
 	[params.location]
@@ -117,6 +117,6 @@ googleAnalytics = "UA-86033085-1"
 
   # footer section
   [params.footer]
-    description = "Designed and built by [R3 Labs](http://www.r3labs.io/). Maintained by the [core team](https://github.com/orgs/ernestio/people) with the excellent help of our [contributors](https://github.com/ernestio/ernest/graphs/contributors). <br> Code licensed under Mozilla 2.0. You can find us on [Twitter](https://twitter.com/r3labs), [Slack](http://docs.ernest.io/slack/) and [Google](https://groups.google.com/forum/#!forum/ernestio)"
+    description = "Designed and built by [Ernest IO](http://www.ernest.io/). Maintained by the [core team](https://github.com/orgs/ernestio/people) with the excellent help of our [contributors](https://github.com/ernestio/ernest/graphs/contributors). <br> Code licensed under Mozilla 2.0. You can find us on [Twitter](https://twitter.com/ernest_io), [Slack](http://docs.ernest.io/slack/) and [Google](https://groups.google.com/forum/#!forum/ernestio)"
   	address = "2 Leman Street London E1 8FA"
-  	email = "info@r3labs.io"
+  	email = "info@ernest.io"
