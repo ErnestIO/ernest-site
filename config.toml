@@ -50,7 +50,7 @@ googleAnalytics = "UA-86033085-1"
 		# To change the background of the hero section, replace the 'header.jpg' at './static/img' with your own.
 		slogan     = "Developer driven Orchestration"
 		subtitle   = "Ernest is an open source layer that lets you drive cloud infrastructure and platforms thorough a simple config file inside your application"
-		buttonText = "Ernest 3.8.0 is out now!"
+		buttonText = "Ernest 3.14.0 is out now!"
 
 
 
